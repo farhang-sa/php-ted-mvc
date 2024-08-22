@@ -2,15 +2,19 @@
     "name": "farhang-sa/php-ted-mvc",
     "description": "A mini mvc for building web/cli apps",
     "type": "library",
-    "license": "MIT",
 	"version" : "1.0.0" ,
+    "keywords": [ "ted", "mvc", "php" ],
     "authors": [
         {
             "name": "farhang-sa",
             "email": "Saeedi.Farhang@gmail.com"
         }
     ],
+    "license": "MIT",
     "require": {
         "php": ">=5"
-	}
+	} ,
+    "autoload": {
+        "files": [ "Ted.php" ]
+    }
 }
