@@ -1,2 +1,8 @@
 
 .git
+composer.lock
+
+/vendor
+
+/test
+test.php

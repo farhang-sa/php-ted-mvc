@@ -1,9 +1,10 @@
-<?php
+<?php namespace Ted ;
 
-namespace Ted ;
+if( defined( 'TVersion' ) )
+	return ; // Avoid reloading.
 
 // Package Version 
-define( 'TVersion' , 'v1' );
+define( 'TVersion' , '1' );
 
 // Set Ini Use Cookies
 ini_set('session.cookie_secure', 0 );
@@ -126,6 +127,9 @@ class Ted {
 	public static function infophp(){ self::info(); }
 	public static function info(){
 
+		if( IsCli() )
+			return self::infocli();
+
 		// style
 		self::printStyle();
 		
@@ -163,7 +167,6 @@ class Ted {
 			$vars[ 'INI : ' . $item . '' ] = $val ;
 		}
 
-		$a = shell_exec( 'composer --version' );
 		$cmd = array( 'git' , 'composer' , 'mysqld' , 'postgres' , 'mariadb' , 'python' , 'java' , 'node' , 'npm' );
 		if( $execf ) foreach ($cmd as $tool ) {
 			$exe = null ;
@@ -185,7 +188,7 @@ class Ted {
 		print '<tr"><th colspan=2>Ted Definitions</th></tr>';
 		print '<tr><th>Defined</th><th>Value</th></tr>';
 		$vars = array( 
-			'Ted Version' 		=> TVersion ,
+			'Ted Version' 		=> 'v' . TVersion ,
 			'TPath_Base' 		=> TPath_Base ,
 			'TPath_Root' 	  	=> TPath_Root ,
 			'TPath_IndexPath' 	=> TPath_IndexPath ,
@@ -236,6 +239,65 @@ class Ted {
 		foreach ($ini as $k => $v )
 			print '<tr><th>' . $k . '</th><th>' . $v['global_value'] . '</th>' .
 				'<th>' . $v['local_value'] . '</th><th>' . $v['access'] . '</th></tr>';
+
+	}
+
+	public static function infocli(){
+		print PHP_EOL ;
+		$strTed = <<<EOF
+		*************   *************    ********
+		*************   *************    **********
+		    ****        ****             ****    ***
+		    ****        ****             ****    ****
+		    ****        *************    ****    ****
+		    ****        *************    ****    ****
+		    ****        ****             ****    ****
+		    ****        ****             ****    ***
+		    ****        *************    **********
+		    ****        *************    *********
+		EOF;
+		$split = explode( PHP_EOL , $strTed );
+		foreach( $split as $line ){
+			print $line . PHP_EOL ;
+			usleep( 50000 );
+		} print PHP_EOL ;
+
+		// PHPINFO Definitions
+		$exten = get_loaded_extensions();
+		$extel = "" ;
+		for($i = 0 ; $i <= count( $exten ) - 1 ; $i++ ) {
+			$extel .= $exten[$i] . ' - ' ;
+			if( $i !== 0 && $i%10 === 0 )
+				$extel = trim( $extel , ' -' ) . PHP_EOL . "\t";
+		} $extel = trim( $extel , ' -' );
+		$execs = ExecFunctions();
+		$execf = ! empty( $execs ) ? $execs[0] : null ;
+		$vars = array( 
+			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
+			'Machine Name' => gethostname() ,
+			'Who Am I' => get_current_user() ,
+			'PHP Version' => defined( 'PHP_VERSION' ) ? PHP_VERSION : phpversion() ,
+			'Exec' => join( ' - ' , $execs ) . PHP_EOL ,
+			'Extensions' => $extel . PHP_EOL
+		);
+
+		$cmd = array( 'git' , 'composer' , 'mysqld' , 'postgres' , 'mariadb' , 'python' , 'java' , 'node' , 'npm' );
+		if( $execf ) foreach ($cmd as $tool ) {
+			$exe = null ;
+			$exf = null ;
+			exec( $tool . ' --version &' , $exe  , $exf );
+			$exe = empty( $exe ) ? '-----' : $exe[ count( $exe ) - 1 ];
+			if( stristr( $exe , '--version' ) )
+				$exe = explode( '--version' , $exe )[1] ;
+			$exe = trim( $exe , ' -' );
+			$vars[ $tool ] = $exe ;
+		}
+
+		print PHP_EOL . PHP_EOL . '********************************' . PHP_EOL ;
+		foreach( $vars as $k => $v ){
+			print '** ' . $k . " -> \t" . $v . PHP_EOL ;
+			usleep( 50000 );
+		} print '********************************' . PHP_EOL ;
 
 	}
 
