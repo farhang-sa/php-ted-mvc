@@ -320,7 +320,7 @@ abstract class Application extends AppBase {
 
 		if ( $this->Sink() ) return $this->Response( $this->Sink() );
 		
-		if ( file_exists( $this->AppRoute ) ) {
+		if ( $this->AppRoute && file_exists( $this->AppRoute ) ) {
 
 			foreach ( $Args as $ke_24ehj32y => $value ) {
 
