@@ -168,19 +168,20 @@ class Ted {
 		}
 
 		$cmd = array( 'git' , 'composer' , 'mysqld' , 'postgres' , 'mariadb' , 'python' , 'java' , 'node' , 'npm' );
-		if( $execf ) foreach ($cmd as $tool ) {
-			$exe = null ;
-			$exf = null ;
-			@$execf( $tool . ' --version' , $exe  , $exf );
-			$exe = empty( $exe ) ? '-----' : $exe[ count( $exe ) - 1 ];
-			if( stristr( $exe , '--version' ) )
-				$exe = explode( '--version' , $exe )[1] ;
-			$exe = trim( $exe , ' -' );
-			$exe = str_ireplace( "\n", '<br />', $exe );
-			$vars[ $tool ] = $exe ;
-		}
-
-
+		if( $execf ) try {
+			foreach ($cmd as $tool ) {
+				$exe = null ;
+				$exf = null ;
+				@$execf( $tool . ' --version' , $exe  , $exf );
+				$exe = empty( $exe ) ? '-----' : $exe[ count( $exe ) - 1 ];
+				if( stristr( $exe , '--version' ) )
+					$exe = explode( '--version' , $exe )[1] ;
+				$exe = trim( $exe , ' -' );
+				$exe = str_ireplace( "\n", '<br />', $exe );
+				$vars[ $tool ] = $exe ;
+			}
+		} catch (Exception $e) { print 'Command exec error!' ; }
+			
 		foreach( $vars as $name => $val )
 			print "<tr><td>{$name}</td><td>{$val}</td></tr>" ;
 

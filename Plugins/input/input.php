@@ -47,18 +47,18 @@ class inputPlugin extends Ted\Plugin {
 	
 		if ( $dataValue !== null ) { $this->{$name} = $dataValue ; return $dataValue ; }
 
-		/// For _ Values Link "Start_with_SECUENCE_seTing"
+		/// For _ Values Link 'Start_with_SECUENCE_seTing'
 		$Needle = null ;
 
-		$Needle = ( stristr( $Original , " " ) !== false ) ? " " : $Needle ;
+		$Needle = ( stristr( $Original , ' ' ) !== false ) ? ' ' : $Needle ;
 
-		$Needle = ( stristr( $Original , "." ) !== false ) ? "." : $Needle ;
+		$Needle = ( stristr( $Original , '.' ) !== false ) ? '.' : $Needle ;
 
-		$Needle = ( stristr( $Original , "-" ) !== false ) ? "-" : $Needle ;
+		$Needle = ( stristr( $Original , '-' ) !== false ) ? '-' : $Needle ;
 
-		$Needle = ( stristr( $Original , "~" ) !== false ) ? "~" : $Needle ;
+		$Needle = ( stristr( $Original , '~' ) !== false ) ? '~' : $Needle ;
 
-		$Needle = ( stristr( $Original , "_" ) !== false ) ? "_" : $Needle ;
+		$Needle = ( stristr( $Original , '_' ) !== false ) ? '_' : $Needle ;
 
 		if ( $Needle ) {
 
@@ -66,19 +66,19 @@ class inputPlugin extends Ted\Plugin {
 
 			$explode 	= explode( $Needle , $Original ) ; // 
 
-			$NewValue 	= "" ;
+			$NewValue 	= ' ;
 
 			foreach ( $explode as $value ) $NewValue .= $Needle . ucfirst( $value ) ;
 
 			$NewSearch[] = trim( $NewValue , $Needle ) ;
 
-			$NewValue 	= "" ;
+			$NewValue 	= ' ;
 
 			foreach ( $explode as $value ) $NewValue .= $Needle . strtolower( $value ) ;
 
 			$NewSearch[] = trim( $NewValue , $Needle ) ;
 
-			$NewValue 	= "" ;
+			$NewValue 	= ' ;
 
 			foreach ( $explode as $value ) $NewValue .= $Needle . strtoupper( $value ) ;
 
@@ -126,25 +126,25 @@ class inputPlugin extends Ted\Plugin {
 
 	public function doSearch(){
 
-		return call_user_func_array( [ $this , "Search" ] , func_get_args() ) ;
+		return call_user_func_array( [ $this , 'Search' ] , func_get_args() ) ;
 		
 	}
 
 	public function SearchFor(){
 
-		return call_user_func_array( [ $this , "Search" ] , func_get_args() ) ;
+		return call_user_func_array( [ $this , 'Search' ] , func_get_args() ) ;
 
 	}
 
 	public function VariableSearch(){
 
-		return call_user_func_array( [ $this , "Search" ] , func_get_args() ) ;
+		return call_user_func_array( [ $this , 'Search' ] , func_get_args() ) ;
 		
 	}
 
 	public function SearchForVariable(){
 
-		return call_user_func_array( [ $this , "Search" ] , func_get_args() ) ;
+		return call_user_func_array( [ $this , 'Search' ] , func_get_args() ) ;
 	}
 
 	public function Search(){
@@ -181,9 +181,9 @@ class inputPlugin extends Ted\Plugin {
 
 	public function Airport(){
 
-		/// [ "search1" , "search2" ] , [ "value1" , "value2" ]
-		/// [ "search1" => "value3" , "search2" => [ "someValue1" , "someValue2" ] ]
-		$searchList = array() ; // [ "search1" => [ "value1" ] , "search2" => [ "value2" , "someAnotherValue" ] ]
+		/// [ 'search1' , 'search2' ] , [ 'value1' , 'value2' ]
+		/// [ 'search1' => 'value3' , 'search2' => [ 'someValue1' , 'someValue2' ] ]
+		$searchList = array() ; // [ 'search1' => [ 'value1' ] , 'search2' => [ 'value2' , 'someAnotherValue' ] ]
 
 		$args = func_get_args() ;
 
@@ -308,7 +308,7 @@ class inputPlugin extends Ted\Plugin {
 
 			$dataValue = $this->Evaluate( $Name , $dataValue );
 			
-			if ( $dataValue === false ) $lostargs[ $Name ] = ( $Desc ) ? $Desc : "" ;
+			if ( $dataValue === false ) $lostargs[ $Name ] = ( $Desc ) ? $Desc : ' ;
 		
 		}
 
@@ -332,9 +332,9 @@ class inputPlugin extends Ted\Plugin {
 		
 				$Name = null ;
 		
-				if ( stristr( $newData , "(" ) && stristr( $newData , ")" )  && $newData[ strlen( $newData ) - 1 ] == "(" ){
+				if ( stristr( $newData , '(' ) && stristr( $newData , ')' )  && $newData[ strlen( $newData ) - 1 ] == '(' ){
 						
-					$editExp = explode( "(" , $newData , 2 ) ;
+					$editExp = explode( '(' , $newData , 2 ) ;
 		
 					$Name = ( string ) trim( $editExp[ 0 ] );
 						
@@ -342,9 +342,9 @@ class inputPlugin extends Ted\Plugin {
 						
 					$newData = ( string ) substr( $editNew , 0 , -1 );
 						
-				} if ( stristr( $newData , "," ) ) {
+				} if ( stristr( $newData , ',' ) ) {
 						
-					$editExp = explode( "," , $newData ) ;
+					$editExp = explode( ',' , $newData ) ;
 						
 					$Name = null ;
 						
@@ -370,13 +370,13 @@ class inputPlugin extends Ted\Plugin {
 								
 							$new = ( string ) trim( $editExp[ 0 ] ) ;
 								
-							if ( stristr( $new , "nam" ) ) $nn = 0 ;
+							if ( stristr( $new , 'nam' ) ) $nn = 0 ;
 								
-							else if ( stristr( $new , "def" ) ) $nn = 1 ;
+							else if ( stristr( $new , 'def' ) ) $nn = 1 ;
 								
-							else if ( stristr( $new , "des" ) ) $nn = 2 ;
+							else if ( stristr( $new , 'des' ) ) $nn = 2 ;
 								
-							else if ( stristr( $new , "met" ) ) $nn = 3 ;
+							else if ( stristr( $new , 'met' ) ) $nn = 3 ;
 								
 							$vv = ( string ) trim( $editExp[ 1 ] ) ;
 								
@@ -420,47 +420,47 @@ class inputPlugin extends Ted\Plugin {
 		
 					}
 						
-					$MainControl[ $Name ] = array( "default" => $Defa , "desc" => $Desc , "method" => $Meth ) ;
+					$MainControl[ $Name ] = array( 'default' => $Defa , 'desc' => $Desc , 'method' => $Meth ) ;
 						
 				} else {
 						
-					if ( stristr( $newData , ":" ) && ! stristr( $newData , "=" ) && ! stristr( $newData , ">" ) ){
+					if ( stristr( $newData , ':' ) && ! stristr( $newData , '=' ) && ! stristr( $newData , '>' ) ){
 		
 						// id : desc
 							
-						$editExp = explode( ":" , ( string ) trim( $newData ) , 2 ) ;
+						$editExp = explode( ':' , ( string ) trim( $newData ) , 2 ) ;
 		
 						$Name = ( string ) trim( $editExp[ 0 ] ) ;
 		
 						$Desc = ( string ) trim( $editExp[ 1 ] ) ;
 		
-						$MainControl[ $Name ] = array( "default" => null , "desc" => $Desc , "method" => null ) ;
+						$MainControl[ $Name ] = array( 'default' => null , 'desc' => $Desc , 'method' => null ) ;
 		
-					} else if ( ! stristr( $newData , ":" ) && stristr( $newData , "=" ) && ! stristr( $newData , ">" ) ){
+					} else if ( ! stristr( $newData , ':' ) && stristr( $newData , '=' ) && ! stristr( $newData , '>' ) ){
 		
 						// id = defalut
 							
-						$editExp = explode( "=" , ( string ) trim( $newData ) , 2 ) ;
+						$editExp = explode( '=' , ( string ) trim( $newData ) , 2 ) ;
 		
 						$Name = ( string ) trim( $editExp[ 0 ] ) ;
 		
 						$Defa = ( string ) trim( $editExp[ 1 ] ) ;
 		
-						$MainControl[ $Name ] = array( "default" => $Defa , "desc" => null , "method" => null ) ;
+						$MainControl[ $Name ] = array( 'default' => $Defa , 'desc' => null , 'method' => null ) ;
 		
-					} else if ( ! stristr( $newData , ":" ) && ! stristr( $newData , "=" ) && stristr( $newData , ">" ) ){
+					} else if ( ! stristr( $newData , ':' ) && ! stristr( $newData , '=' ) && stristr( $newData , '>' ) ){
 		
 						// id > method
 							
-						$editExp = explode( ">" , ( string ) trim( $newData ) , 2 ) ;
+						$editExp = explode( '>' , ( string ) trim( $newData ) , 2 ) ;
 		
 						$Name = ( string ) trim( $editExp[ 0 ] ) ;
 		
 						$Meth = ( string ) trim( $editExp[ 1 ] ) ;
 		
-						$MainControl[ $Name ] = array( "default" => null , "desc" => null , "method" => $Meth ) ;
+						$MainControl[ $Name ] = array( 'default' => null , 'desc' => null , 'method' => $Meth ) ;
 		
-					} else if ( stristr( $newData , ":" ) || stristr( $newData , "=" ) || stristr( $newData , ">" ) ){
+					} else if ( stristr( $newData , ':' ) || stristr( $newData , '=' ) || stristr( $newData , '>' ) ){
 		
 						$Name = $Default = $Desc = $Method = null ;
 		
@@ -468,39 +468,39 @@ class inputPlugin extends Ted\Plugin {
 		
 						$Name = $Name [ 1 ][ 0 ] ;
 		
-						if ( stristr( $newData , "=" ) ) {
+						if ( stristr( $newData , '=' ) ) {
 								
 							$a = preg_match_all( '|.*=(.*)[:^>]|iU' , $newData , $Default ) ;
 								
-							if ( $a === 0 ) $Default = explode( "=" , $newData , 2 )[1] ;
+							if ( $a === 0 ) $Default = explode( '=' , $newData , 2 )[1] ;
 								
 							else $Default = $Default[ 1 ][ 0 ];
 								
-						} if ( stristr( $newData , ":" ) ) {
+						} if ( stristr( $newData , ':' ) ) {
 								
 							$a = preg_match_all( '|.*:(.*)[>^=]|iU' , $newData , $Desc ) ;
 								
-							if ( $a === 0 ) $Desc = explode( ":" , $newData , 2 )[1] ;
+							if ( $a === 0 ) $Desc = explode( ':' , $newData , 2 )[1] ;
 								
 							else $Desc = $Desc[ 1 ][ 0 ];
 								
-						} if ( stristr( $newData , ">" ) ) {
+						} if ( stristr( $newData , '>' ) ) {
 								
 							$a = preg_match_all( '|.*>(.*)[=^:]|iU' , $newData , $Method ) ;
 								
-							if ( $a === 0 ) $Method = explode( ">" , $newData , 2 )[1] ;
+							if ( $a === 0 ) $Method = explode( '>' , $newData , 2 )[1] ;
 								
 							else $Method = $Method[ 1 ][ 0 ];
 								
 						}
 		
-						$MainControl[ $Name ] = array( "default" => $Default , "desc" => $Desc , "method" => $Method ) ;
+						$MainControl[ $Name ] = array( 'default' => $Default , 'desc' => $Desc , 'method' => $Method ) ;
 		
 					} else {
 		
 						$Name = ( string ) trim( $newData ) ;
 		
-						$MainControl[ $Name ] = array( "default" => null , "desc" => null , "method" => null ) ;
+						$MainControl[ $Name ] = array( 'default' => null , 'desc' => null , 'method' => null ) ;
 		
 					}
 						
@@ -598,11 +598,11 @@ class inputPlugin extends Ted\Plugin {
 
 	public function kill( $needs = array() ) {
 
-		$arr["CODE"] = "0";
+		$arr['CODE'] = '0';
 		
-		$arr["ERROR"] = " Please Fill This Fields ";
+		$arr['ERROR'] = 'Please fill this fields';
 		
-		$arr["NEED"] = $needs;
+		$arr['NEED'] = $needs;
 		
 		return parent::kill( $arr );
 	
