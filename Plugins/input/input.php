@@ -66,19 +66,19 @@ class inputPlugin extends Ted\Plugin {
 
 			$explode 	= explode( $Needle , $Original ) ; // 
 
-			$NewValue 	= ' ;
+			$NewValue 	= '' ;
 
 			foreach ( $explode as $value ) $NewValue .= $Needle . ucfirst( $value ) ;
 
 			$NewSearch[] = trim( $NewValue , $Needle ) ;
 
-			$NewValue 	= ' ;
+			$NewValue 	= '' ;
 
 			foreach ( $explode as $value ) $NewValue .= $Needle . strtolower( $value ) ;
 
 			$NewSearch[] = trim( $NewValue , $Needle ) ;
 
-			$NewValue 	= ' ;
+			$NewValue = '' ;
 
 			foreach ( $explode as $value ) $NewValue .= $Needle . strtoupper( $value ) ;
 
@@ -308,7 +308,7 @@ class inputPlugin extends Ted\Plugin {
 
 			$dataValue = $this->Evaluate( $Name , $dataValue );
 			
-			if ( $dataValue === false ) $lostargs[ $Name ] = ( $Desc ) ? $Desc : ' ;
+			if ( $dataValue === false ) $lostargs[ $Name ] = ( $Desc ) ? $Desc : '' ;
 		
 		}
 
