@@ -1,21 +1,25 @@
 {
     "name": "farhang-sa/php-ted-mvc",
     "description": "A mini mvc for building web/cli apps",
+    "keywords": [ "ted", "mvc", "php" ],
     "type": "library",
 	"version" : "1.0.0" ,
-    "keywords": [ "ted", "mvc", "php" ],
+    "license": "MIT",
+    "minimum-stability": "stable" ,
+    
     "authors": [
         {
             "name": "farhang-sa",
             "email": "Saeedi.Farhang@gmail.com"
         }
-    ], "repositories": [
+    ], 
+
+    "repositories": [
         {
             "type": "git" ,
             "url": "https://github.com/farhang-sa/php-maxtools.git"
         } 
     ],
-    "license": "MIT",
     
     "require": {
         "php": ">=5" ,
