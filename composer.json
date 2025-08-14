@@ -19,7 +19,7 @@
     
     "require": {
         "php": ">=5" ,
-        "farhang-sa/php-maxtools" : "*" 
+        "farhang-sa/php-maxtools" : "dev-main" 
 	} ,
     
     "autoload": {
