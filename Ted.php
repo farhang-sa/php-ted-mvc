@@ -50,7 +50,7 @@ foreach( $scn as $DirName ){
 }
 
 // Load Ted Basic Functions
-include_once( "Statics/Functions.php" );
+include_once( 'Statics/Functions.php' );
 
 // Define The Root Execution Directory
 defined( 'TPath_Root' ) or define( 'TPath_Root' , dirname( ScriptFile() ) );
@@ -82,6 +82,19 @@ define( 'TWeb_ScriptPath' , TWeb_Path );
 // the TWeb_URL constant : http://user:pass@ted.com:8081/tedpath/
 $path = TWeb_DomainAccess . TWeb_Path ;
 $path = trim( $path , " \\/" );
+
+// clean port 443 for https default port!
+if( TWeb_Schame === 'https' && strpos( $path , TWeb_HttpDomain . ':443' ) === 0 )
+	$path = substr_replace( $path , TWeb_HttpDomain , 0 , strlen( TWeb_HttpDomain . ':443' ) );
+
+// clean port 80 for https default port!
+if( TWeb_Schame === 'https' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
+	$path = substr_replace( $path , TWeb_HttpDomain , 0 , strlen( TWeb_HttpDomain . ':80' ) );
+
+// clean port 80 for http default port!
+if( TWeb_Schame === 'http' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
+	$path = substr_replace( $path , TWeb_HttpDomain , 0 , strlen( TWeb_HttpDomain . ':80' ) );
+
 define( 'TWeb_URL' , $path ); 
 define( 'TWeb_url' , TWeb_URL ); 
 define( 'TWeb_UrlRoot' , TWeb_URL ); 

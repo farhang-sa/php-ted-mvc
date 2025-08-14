@@ -9,6 +9,11 @@
             "name": "farhang-sa",
             "email": "Saeedi.Farhang@gmail.com"
         }
+    ], "repositories": [
+        {
+            "type": "git" ,
+            "url": "https://github.com/farhang-sa/php-maxtools.git"
+        } 
     ],
     "license": "MIT",
     

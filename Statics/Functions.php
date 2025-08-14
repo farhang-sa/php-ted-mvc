@@ -2,10 +2,6 @@
 
 defined( 'TExec' ) or die( 'Access Denied' );
 
-// Load MaxTools functions if not MaxTools used
-if( ! function_exists( 'MaxTools\HumanFileSize' ) )
-	include_once 'Functions.MaxTools.php' ;
-
 use MaxTools ;
 
 // Get Human-Readable File size

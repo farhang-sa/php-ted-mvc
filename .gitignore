@@ -1,8 +1,16 @@
 
+*.zip
+*.exe
+*.cmd
+*.sh
+*.py
+*.jar
+
 .git
 composer.lock
 
 /vendor
 
 /test
-test.php
+/index.php
+/test.php
