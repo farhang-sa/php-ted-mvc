@@ -50,7 +50,7 @@ foreach( $scn as $DirName ){
 }
 
 // Load Ted Basic Functions
-include_once( 'Statics/Functions.php' );
+\MaxTools\Import( 'Statics.Functions' , TPath_Base );
 
 // Define The Root Execution Directory
 defined( 'TPath_Root' ) or define( 'TPath_Root' , dirname( ScriptFile() ) );

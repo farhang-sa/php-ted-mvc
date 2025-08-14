@@ -18,7 +18,8 @@
     "license": "MIT",
     
     "require": {
-        "php": ">=5" 
+        "php": ">=5" ,
+        "farhang-sa/php-maxtools" : "*" 
 	} ,
     
     "autoload": {
