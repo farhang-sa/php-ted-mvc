@@ -6,7 +6,7 @@ use MaxTools ;
 
 // Get Human-Readable File size
 function HumanFileSize( $size , $unit = '' ) {
-  return MaxTools\HumanFileSize( $size , $unit ); }
+	return MaxTools\HumanFileSize( $size , $unit ); }
 
 // Get Human-Readable price
 function HumanPrice( $price ){
@@ -111,7 +111,7 @@ function WebPath(){
 
 // Get Web-Link ( Direct-Link ) of a file
 function FindWebPath( $address = null ){
-	MaxTools\FindWebPath( $address , TPath_Root ); }
+	return MaxTools\FindWebPath( $address , TPath_Root ); }
 
 
 function ListMultipartUploads( $MPUF ){
