@@ -32,7 +32,7 @@ class Html_Interface extends Ted\TedInterface {
 		
 		$this->setRoot( $UIRoot );
 		
-		$this->init( );	
+		$this->init();	
 
 	}
 
@@ -271,6 +271,9 @@ class Html_Interface extends Ted\TedInterface {
 		print "<a href='{$href}' class='{$classes}' style='{$styles}' {$extra}>{$text}</a>" ;
 
 	}
+
+	public function pTranslate( $your_string ){
+		print $this->App()->Translate( $your_string ); }
 
 	public function GetDeviceIntent( $os , $scheme , $package , $activity ){
 	    
@@ -650,7 +653,7 @@ class Html_Interface extends Ted\TedInterface {
 	
 	public function getBody(){ return self::$body ; }
 	
-	public function RenderHead( ) {
+	public function RenderHead() {
 		
 		$returns = PHP_EOL ;
 		
@@ -845,7 +848,8 @@ class Html_Interface extends Ted\TedInterface {
 
 				$eFile = $this->FindHtml( $PHPRoute ) ;
 				
-				if ( $eFile ) $this->Response( $eFile );
+				if ( $eFile ) 
+					$this->Response( $eFile );
 
 				else $this->App()->Execute();
 				
@@ -855,7 +859,8 @@ class Html_Interface extends Ted\TedInterface {
 		
 		@ob_end_clean(); // End Cleaning Output Buffer
 		
-		if ( $directRespond ) print $this->RenderComponent();
+		if ( $directRespond ) 
+			print $this->RenderComponent();
 		
 		return true ;
 		

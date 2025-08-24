@@ -120,7 +120,7 @@ abstract class Application extends AppBase {
 			call_user_func_array( [ $this , 'AppRouterMethod' ] , $defaultRoute ) ;
 
 		// Find UI's
-		$UiFolders = [ "UI" , "UIs" , "Interfaces" , "UserInterfaces" ] ;
+		$UiFolders = [ 'UI' , 'UIs' , 'Interfaces' , 'UserInterfaces' ] ;
 
 		$uiDirectory = FindDirectory( $this->AppRoot() , $UiFolders );
 				
@@ -275,17 +275,11 @@ abstract class Application extends AppBase {
 	/// General Application Behavior Controllers */
 
 	public function Respond( $uiType = null ){
-		
-		return $this->AppInterface( $uiType )->Respond( true ) ;
-		
-	}
+		return $this->AppInterface( $uiType )->Respond( true ) ; }
 
 	public function Route() {
-		
 		return call_user_func_array( [ $this , 'AppRouterMethod' ] , 
-			func_get_args() ) ;
-
-	}
+			func_get_args() ) ; }
 
 	public function Sink(){
 
@@ -315,10 +309,10 @@ abstract class Application extends AppBase {
 		list( $Route , $Args ) = FindRouteElements( $Args );
 		
 		if ( ! empty( $Route ) ) 
-
 			call_user_func_array( [ $this , 'AppRouterMethod' ] , $Route );
 
-		if ( $this->Sink() ) return $this->Response( $this->Sink() );
+		if ( $this->Sink() ) 
+			return $this->Response( $this->Sink() );
 		
 		if ( $this->AppRoute && file_exists( $this->AppRoute ) ) {
 
@@ -334,7 +328,7 @@ abstract class Application extends AppBase {
 
 			} return include $this->AppRoute ;
 
-		} return $this->Response(["message" => "Incorrect Route" , "code" => "404"]);
+		} return $this->Response(['message' => 'Incorrect Route' , 'code' => '404']);
 
 	}
 
@@ -356,7 +350,7 @@ abstract class Application extends AppBase {
 
 		array_push( $Olds , $this->AppState ) ;
 
-		$Rets = call_user_func_array( [ $this , 'Execute' ] , func_get_args( ) ) ;
+		$Rets = call_user_func_array( [ $this , 'Execute' ] , func_get_args() ) ;
 		
 		call_user_func_array( [ $this , 'AppRouterMethod' ] , $Olds ) ;
 		
@@ -377,7 +371,6 @@ abstract class Application extends AppBase {
 			return ( ! empty( $ARGS ) ) ? $ARGS : null ;
 		
 		if ( $this->AppInterface() ) 
-
 			return call_user_func_array( [ $this->AppInterface() , 'Response' ] , [ $ARGS ] ) ;
 
 		return [ "message" => "No User Interface" , "code" => "403" ];
@@ -387,33 +380,32 @@ abstract class Application extends AppBase {
 	/***************************************
 	/* Application Intels / Genral Intel Stuff */
 
-	public function AppRoot()	{ return $this->AppRoot ; }
+	public function AppRoot()	{ 
+		return $this->AppRoot ; }
 
-	public function AppRootWww(){ return FindWebPath( $this->AppRoot() ) ; }
+	public function AppRootWww(){ 
+		return FindWebPath( $this->AppRoot() ) ; }
 
-	public function AppRootUrl(){ return $this->AppRootWww() ; }
+	public function AppRootUrl(){ 
+		return $this->AppRootWww() ; }
 
 	public function AppWww() { 
+		return $this->AppWww = TWeb_Index . '/' . $this->AppName();  }
 
-		return $this->AppWww = TWeb_URL . "/" . basename( TPath_Index ) . "/" . $this->AppName(); 
-
-	}
-
-	public function AppUrl() { return $this->AppWww(); }
+	public function AppUrl() { 
+		return $this->AppWww(); }
 
 	public function AppName() {
 
 		if ( $this->AppName === null ) {
 			
 			$mName = trim( get_class( $this )  , " .\\/") ;
-
 			$mName = explode( "\\" , $mName )[ 0 ] ;
 			
 			if ( stristr( $mName , "\\" ) === false ) {
 
 				$AName = substr( $mName , -3 ) ;
-			
-				$mName = ( strtoupper( $AName ) == "APP" ) ? substr( $mName , 0 , -3 ) : $mName ;
+				$mName = ( strtoupper( $AName ) == 'APP' ) ? substr( $mName , 0 , -3 ) : $mName ;
 
 			} $this->AppName = trim( $mName , " .\\/");
 			
@@ -422,21 +414,17 @@ abstract class Application extends AppBase {
 	}
 
 	/// Special Intel Stuff
-	public function AppState(){ return is_bool( $this->AppState ) ? $this->AppState : false ; }
+	public function AppState(){ 
+		return is_bool( $this->AppState ) ? $this->AppState : false ; }
 
-	public function AppHistory(){ return is_array( $this->AppHistory ) ? $this->AppHistory : array() ; }
+	public function AppHistory(){ 
+		return is_array( $this->AppHistory ) ? $this->AppHistory : array() ; }
 
 	public function AppComp() { 
-
-		return $this->AppComp = isset( $this->AppHistory[1] ) ? $this->AppHistory[1] : $this->AppComp ; 
-
-	}
+		return $this->AppComp = isset( $this->AppHistory[1] ) ? $this->AppHistory[1] : $this->AppComp ; }
 
 	public function AppFunc() { 
-
-		return $this->AppFunc = isset( $this->AppHistory[2] ) ? $this->AppHistory[2] : $this->AppFunc ; 
-
-	}
+		return $this->AppFunc = isset( $this->AppHistory[2] ) ? $this->AppHistory[2] : $this->AppFunc ; }
 
 	public function AppRoute(){ return $this->AppRoute ; }
 
@@ -452,21 +440,17 @@ abstract class Application extends AppBase {
 	protected function Router( $Route = array() ){
 
 		$History = ( is_array( $Route ) && ! empty( $Route ) ) ? 
-
 			array_values( $Route ) : $this->AppHistory();
 
-		if ( strtolower( $History[ 0 ] ) !== strtolower( $this->AppName ) )
-
+		if ( ! empty( $History ) && strtolower( $History[0] ) !== strtolower( $this->AppName ) )
 			array_unshift( $History , $this->AppName ) ;
 			
 		$OHistory = $this->AppHistory() ;
-			
 		$NHistory = array( ) ;
 		
 		foreach ( $History as $nu => $nRoute ) {
 		
 			if ( $nRoute === null ) 
-
 				$NHistory[ $nu ] = ( isset( $OHistory[ $nu ] ) ) ? $OHistory[ $nu ] : null ;
 		
 			else $NHistory[ $nu ] = $nRoute ;
@@ -480,52 +464,40 @@ abstract class Application extends AppBase {
 			return $this->AppRoute ;
 		
 		$this->AppHistory = $NHistory ;
-
 		$this->AppComp = $NHistory[ 1 ] ;
-			
 		$this->AppFunc = ( isset( $NHistory[ 2 ] ) ) ? $NHistory[ 2 ] : null ;
 
 		array_shift( $NHistory ) ;
 
 		$Route = null ;
-
 		$Comp = $this->AppComp() ;
-		
-		$COMPDir = [ "Components" , "Comp" , "Comps" , "Com" , "Coms" ] ;
+		$COMPDir = [ 'Components' , 'Comp' , 'Comps' , 'Com' , 'Coms' ] ;
 		
 		if ( strlen( ( string ) $this->CompDir ) > 0 ) 
-
 			array_unshift( $COMPDir , $this->CompDir ) ;
 		    
 		$COMPDir = FindDirectory( $this->AppRoot() , $COMPDir ) ;
-		
 		$COMPDir = $COMPDir ? $COMPDir : $this->AppRoot() ;
 		
 		if ( count( $NHistory ) == 0 ){
 
 			$Route = null ;
-
 			return false;
 
 		} else if ( count( $NHistory ) == 1 ){
 			
 			$CoFile = FindFile( $COMPDir , [ "com_{$Comp}.php" , "{$Comp}.php" ] );
+			$CoFile = $CoFile ? $CoFile : 
+				FindFile( $this->AppRoot() , [ "com_{$Comp}.php" , "{$Comp}.php" ] );
 
-			$CoFile = $CoFile ? 
-
-				$CoFile : FindFile( $this->AppRoot() , [ "com_{$Comp}.php" , "{$Comp}.php" ] );
-
-			if ( $CoFile ) return $CoFile ;
+			if ( $CoFile ) 
+				return $CoFile ;
 
 		} $CoDire = FindDirectory( $COMPDir , [ "com_{$Comp}" , "{$Comp}" ] ) ;
-
 		$CoDire = ( $CoDire ) ? $CoDire : $COMPDir ;
-
-		$Route = FindFilePath( $CoDire , $NHistory , "php" );
-
-		$Route = ( $Route ) ? 
-
-			$Route : FindFile( $COMPDir , [ "com_{$Comp}.php" , "{$Comp}.php" ] );
+		$Route = FindFilePath( $CoDire , $NHistory , 'php' );
+		$Route = ( $Route ) ? $Route : 
+			FindFile( $COMPDir , [ "com_{$Comp}.php" , "{$Comp}.php" ] );
 		
 		return $Route ;
 
@@ -542,10 +514,9 @@ abstract class Application extends AppBase {
 				$uiType = Intel::GetVar( 'ui' , null , 'USER' , false ) ;
 
 				if ( Intel::En() === Intel::En_cli() )
+					$uiType = Intel::GetVar( 'ui' , 'cli' , 'USER' , true ) ;
 
-					$uiType = Intel::GetVar( 'ui' , "cli" , 'USER' , true ) ;
-
-				else $uiType = Intel::GetVar( 'ui' , "site" , 'USER' , true ) ;
+				else $uiType = Intel::GetVar( 'ui' , 'site' , 'USER' , true ) ;
 
 			} else $uiType = $this->AppCurrentUI ;
 			
@@ -555,7 +526,7 @@ abstract class Application extends AppBase {
 
 			/////////// return cli/site ui if no ui exists
 
-			$newUiName = ( isCLI() ) ? "Cli" : "Site" ;
+			$newUiName = ( isCLI() ) ? 'Cli' : 'Site' ;
 
 			$AppInterface = "{$newUiName}_Interface" ;
 
@@ -639,7 +610,7 @@ abstract class Application extends AppBase {
 	
 		} else {
 
-			if ( $this->PrivateImpoertPlugin( $plgRoot , $name , "" ) ) return true ;
+			if ( $this->PrivateImpoertPlugin( $plgRoot , $name , '' ) ) return true ;
 					
 			else if ( stristr( $name , '_' ) !== false ) 
 
@@ -710,11 +681,11 @@ abstract class Application extends AppBase {
 	}
 
 	// OverWriteable Tool For Object Loading
-	public function LoadObject( ){
+	public function LoadObject(){
 
 		/// $root , $name , $class , $args  
 
-		$input = func_get_args( ) ;
+		$input = func_get_args() ;
 
 		$root = null; /// Searching Directory
 
@@ -764,7 +735,7 @@ abstract class Application extends AppBase {
 
 		if ( ! $name ) return false ; // Get Out In Object File Name Not Founded Yet :|
 
-		$name = ( strtolower( substr( $name , -4 ) ) == ".php" ) ? substr( $name , 0 , -4 ) : $name ;
+		$name = ( strtolower( substr( $name , -4 ) ) == '.php' ) ? substr( $name , 0 , -4 ) : $name ;
 
 		$class = ( $class ) ? $class : $name ;
 
@@ -786,7 +757,7 @@ abstract class Application extends AppBase {
 
 		if ( $ObjectClassFolder ){
 
-			$ObjectClassFile = FindFile( $root , "{$name}.php" , "index.php" , "class.php" , "object.php" );
+			$ObjectClassFile = FindFile( $root , "{$name}.php" , 'index.php' , 'class.php' , 'object.php' );
 
 			if ( $ObjectClassFile ) {
 
@@ -816,7 +787,23 @@ abstract class Application extends AppBase {
 
 		$LowIns = strtolower( $instance ) ;
 
-		if ( isset( self::$Instances[ $LowIns ] ) ) return self::$Instances[ $LowIns ] ;
+		if ( isset( self::$Instances[ $LowIns ] ) ) 
+			return self::$Instances[ $LowIns ] ;
+
+		if( class_exists( $instance ) ){
+			self::$Instances[ $LowIns ] = new $instance();
+			if( method_exists( self::$Instances[ $LowIns ] , 'Initialise' ) )
+				self::$Instances[ $LowIns ]->Initialise();
+		}
+
+		else if( class_exists( $LowIns ) ){
+			self::$Instances[ $LowIns ] = new $LowIns();
+			if( method_exists( self::$Instances[ $LowIns ] , 'Initialise' ) )
+				self::$Instances[ $LowIns ]->Initialise();
+		}
+
+		if ( isset( self::$Instances[ $LowIns ] ) ) 
+			return self::$Instances[ $LowIns ] ;
 
 		return null ;
 
@@ -828,19 +815,15 @@ abstract class Application extends AppBase {
 
 		if ( isset( self::$Instances[ $LowIns ] ) ){
 
-			if ( method_exists( self::$Instances[ $LowIns ] , "Finish" ) )
+			if ( method_exists( self::$Instances[ $LowIns ] , 'Finish' ) )
+				self::$Instances[ $LowIns ]->Finish();
 
-				self::$Instances[ $LowIns ]->Finish( );
-
-			else if ( method_exists( self::$Instances[ $LowIns ] , "Kill" ) )
-
-				self::$Instances[ $LowIns ]->Kill( );
+			else if ( method_exists( self::$Instances[ $LowIns ] , 'Kill' ) )
+				self::$Instances[ $LowIns ]->Kill();
 
 			unset( self::$Instances[ $LowIns ] ) ;
 
-		}
-
-		return true ;
+		} return true ;
 
 	}
 

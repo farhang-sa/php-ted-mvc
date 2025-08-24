@@ -8,11 +8,12 @@ class Cli_Interface extends Ted\TedInterface {
 
 	private $ent = PHP_EOL;
 
-	private $pro = ":";
+	private $pro = ':' ;
 	
 	public function Respond( $directRespond = false ){ 
 		
-		if ( ! Ted\IsCli( ) ) header( 'Content-Type: text/html; charset=UTF-8' );
+		if ( ! Ted\isCli() ) 
+			header( 'Content-Type: text/html; charset=UTF-8' );
 	
 		parent::Respond(); 
 
@@ -20,11 +21,15 @@ class Cli_Interface extends Ted\TedInterface {
 		
 	}
 
-	public function __construct( $a = null ) {
+	public function __construct( $App = null ) {
 
 		$this->std = fopen( 'php://stdin' , 'a' );
 		
-		$this->prompt( "TED > " );
+		$this->prompt( 'TED > ' );
+
+		$this->setApp( $App ) ;
+		
+		// $this->init();	
 	
 	}
 
@@ -38,9 +43,9 @@ class Cli_Interface extends Ted\TedInterface {
 
 	public function Connect( $directRespond = false ) {
 		
-		$welcomeMSG = "Hello There ! How Can I Help You =)" ;
+		$welcomeMSG = 'Hello there! how can i "help" you =)' ;
 
-		$read = ( $directRespond ) ? $this->CliNewRead( $welcomeMSG ) : $this->CliRead( "" );
+		$read = ( $directRespond ) ? $this->CliNewRead( $welcomeMSG ) : $this->CliRead( '' );
 
 		$this->parseTerminal( $read );
 
@@ -48,11 +53,12 @@ class Cli_Interface extends Ted\TedInterface {
 	
 	}
 
-	public function Response( ) {
+	public function Response() {
 		
 		$ARGUMENTS = func_get_args();
 		
-		if ( empty( $ARGUMENTS ) ) array_push( $ARGUMENTS , [ "execute" => "false" ] );
+		if ( empty( $ARGUMENTS ) ) 
+			array_push( $ARGUMENTS , [ 'execute' => 'false' ] );
 		
 		$ARGUMENTS = ( count( $ARGUMENTS ) == 1 && is_array( $ARGUMENTS[0] ) ) ? $ARGUMENTS[0] : $ARGUMENTS ;
 		
@@ -115,9 +121,9 @@ class Cli_Interface extends Ted\TedInterface {
 			
 		} $EXTRA = ( is_array( $EXTRA ) ) ? $EXTRA : array() ;
 
-		print "Response" ; return false;
+		print 'Response' ; return false;
 
-		$result = "[Result:Null]";
+		$result = '[Result:null]';
 	
 		if ( $RESULT ) {
 				
@@ -127,11 +133,11 @@ class Cli_Interface extends Ted\TedInterface {
 	
 		} if ( count( $NEED ) > 0 ) {
 			
-			$Needs = " You Need [ " . implode( ',' , $NEED ) . " ] ";
+			$Needs = ' You need [ ' . implode( ',' , $NEED ) . ' ] ';
 				
 			$request = "{$result} {$CODE}:{$MESSAGES}, {$Needs}";
 				
-			$this->prite( $request );
+			$this->print( $request );
 				
 			$this->br( 1 );
 				
@@ -143,15 +149,16 @@ class Cli_Interface extends Ted\TedInterface {
 						
 					if ( strlen( $read ) > 0 ) {
 	
-						$this->App( )->data->{$V} = $read;
+						$this->App()->data->{$V} = $read;
 	
 						unset( $NEED[$k] );
 							
-					} else if ( Ted\IsCli( ) ) goto Read ;
+					} else if ( Ted\isCli( ) ) goto Read ;
 	
 				}
 	
-				if ( count( $NEED ) == 0 ) $this->App( )->print->flush = false;
+				/*if ( count( $NEED ) == 0 ) 
+					$this->App()->print->flush = false;*/
 	
 				return true;
 					
@@ -161,7 +168,7 @@ class Cli_Interface extends Ted\TedInterface {
 				
 			$request = "{$result} {$CODE}:{$MESSAGES} ";
 				
-			$this->prite( $request );
+			$this->print( $request );
 				
 			$this->br( 1 );
 				
@@ -173,7 +180,7 @@ class Cli_Interface extends Ted\TedInterface {
 						
 					if ( is_string( $printAble ) ) {
 	
-						$this->prite( $printAble );
+						$this->print( $printAble );
 	
 						continue;
 							
@@ -193,13 +200,13 @@ class Cli_Interface extends Ted\TedInterface {
 					
 			}
 	
-		} $orders = "";
+		} $orders = '' ;
 
 		if ( self::$ini == false ){
 			
 			self::$ini = true ;
 			
-			$orders = "Hello How Can I Help You !" ;
+			$orders = 'Hello how can i help you!' ;
 			
 		}
 		
@@ -215,7 +222,7 @@ class Cli_Interface extends Ted\TedInterface {
 	
 		$orders = ( $orders ) ? $orders : '';
 	
-		$this->prite( $orders , 10000 , 0 , 1 );
+		$this->print( $orders , 10000 , 0 , 1 );
 	
 		$read = $this->read( '' );
 	
@@ -235,15 +242,48 @@ class Cli_Interface extends Ted\TedInterface {
 	
 	}
 	
-	protected function parseTerminal( $reads = "help" ){
+	protected function parseTerminal( $reads = 'help' ){
 
-		if ( $reads == "__ Finish __" ) return true ;
+		if ( $reads == '__ Finish __' ) 
+			return true ;
 
-		else if ( $reads == "exit" ) {
+		else if ( $reads == 'help' ){
 
-			$this->write( "  Bye" , null , 1 , 1 );
+			$this->print( 'You should write your own Cli_Interface extending this one' );
+			$this->print( 'And put your own logic in "parseTerminal" method!' , null , 0 , 1 );
+
+		} else if ( $reads == 'cls' || $reads == 'clear' ) {
+
+			$this->print( 'Will be coded!!!' , 0 , 13 , 2 );
+
+		} else if ( $reads == 'exit' ) {
+
+			$this->print( 'Bye' , null , 1 , 1 );
 
 			return true ;
+
+		} else {
+
+			$expl = explode( ' ' , $reads );
+
+			$route = array();
+			$args = array();
+
+			foreach( $expl as $arg ):
+
+				if( stristr( $arg, '=' ) === false )
+					$route[] = $arg ;
+				else {
+					$arg = explode( '=' , $arg );
+					$args[ $arg[0] ] = $arg[1] ;
+				}
+
+			endforeach;
+
+			if( ! empty( $args ) )
+				$route[] = $args ;
+
+			call_user_func_array( [ $this->App() , 'Call' ] , $route );
 
 		} $this->Connect();
 
@@ -257,21 +297,21 @@ class Cli_Interface extends Ted\TedInterface {
 		
 		if ( strlen( $prompt ) > 0 ) 
 
-		$prompt = ( substr( $prompt , - 1 ) == ":" ) ? "$prompt " : "$prompt : ";
+		$prompt = ( substr( $prompt , - 1 ) == ':' ) ? "$prompt " : "$prompt : ";
 		
-		else $prompt = "";
+		else $prompt = '';
 
 		$time = ( is_int( $time ) ) ? $time : 25000 ;
 		
-		$this->prite( $prompt , $time , 0 , 0 );
+		$this->print( $prompt , $time , 0 , 0 );
 		
-		$line = "";
+		$line = '';
 		
-		if ( Ted\IsCli( ) ) {
+		if ( Ted\isCli() ) {
 			
 			$line = fgets( $this->std );
 			
-			$line = str_ireplace( $this->ent , "" , $line );
+			$line = str_ireplace( $this->ent , '' , $line );
 		
 		} else {
 
@@ -279,7 +319,7 @@ class Cli_Interface extends Ted\TedInterface {
 
 			Intel::SetVar( 'cli' , null , 'USER' , true );
 
-			$line = ( $line ) ? $line : "__ Finish __" ;
+			$line = ( $line ) ? $line : '__ Finish __' ;
 
 			$this->write( $line , 0 , 0 , 1 ) ;
 
@@ -293,9 +333,9 @@ class Cli_Interface extends Ted\TedInterface {
 
 		$p = $this->prompt();
 
-		$this->prompt( "" );
+		$this->prompt( '' );
 
-		$this->prite( $text , $time , $lnf , $lns );
+		$this->print( $text , $time , $lnf , $lns );
 
 		$this->prompt( $p );
 
@@ -303,15 +343,15 @@ class Cli_Interface extends Ted\TedInterface {
 
 	}
 
-	public function prite( $text = null , $time = null , $lnf = 1 , $lns = 1 ){
+	public function print( $text = null , $time = null , $lnf = 1 , $lns = 1 ){
 
 		$text = trim( ( string ) $text );
 			
 		$this->ln( $lnf );
 		
-		print $this->prompt( );
+		print $this->prompt();
 		
-		if ( ! Ted\IsCli( ) ) {
+		if ( ! Ted\isCli() ) {
 			
 			print $text ;
 			
@@ -321,7 +361,7 @@ class Cli_Interface extends Ted\TedInterface {
 		
 		}
 		
-		if ( strlen( $text ) > 0 ) $text .= " ";
+		if ( strlen( $text ) > 0 ) $text .= ' ';
 		
 		$leng = strlen( $text );
 
@@ -343,9 +383,10 @@ class Cli_Interface extends Ted\TedInterface {
 
 	public function br( $c = 1 ) {
 
-		$r = "" ;
+		$r = '' ;
 
-		for ($i=1; $i <= $c ; $i++) $r .= PHP_EOL ;
+		for ($i=1; $i <= $c ; $i++) 
+			$r .= PHP_EOL ;
 
 		print $r ;
 
@@ -354,10 +395,7 @@ class Cli_Interface extends Ted\TedInterface {
 	}
 
 	public function ln( $c = 1 ) {
-
-		$this->br( $c );
-
-	}
+		$this->br( $c ); }
 
 }
 

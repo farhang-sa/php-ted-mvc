@@ -4,25 +4,25 @@ defined( 'TExec' ) or die( 'Access Denied' );
 
 class Gtk_Interface extends Ted\TedInterface {
 
-	private $Root = null;
+	protected $Root = null;
 
-	private $Www = null;
+	protected $Www = null;
 			
-	private $htmlDirList = [ 'pages' , 'views' , "layouts" , "htmls" ] ;
+	protected $htmlDirList = [ 'pages' , 'views' , "layouts" , "htmls" ] ;
 
-	private $cssDirList = [ 'css' , 'styles' , 'stylesheets' ];
+	protected $cssDirList = [ 'css' , 'styles' , 'stylesheets' ];
 
-	private $jsDirList = [ 'js' , 'scripts' , 'javascripts' ];
+	protected $jsDirList = [ 'js' , 'scripts' , 'javascripts' ];
 
-	private $fileDireList = [ 'files' , 'data' ];
+	protected $fileDireList = [ 'files' , 'data' ];
 
-	private $deviceDireList = [ 'device' , 'devices' ];
+	protected $deviceDireList = [ 'device' , 'devices' ];
 
-	private $browserDireList = [ 'browser' , 'browsers' ];
+	protected $browserDireList = [ 'browser' , 'browsers' ];
 
-	private $pageDirectory = null;
+	protected $pageDirectory = null;
 
-	private $fileDirectory = null;
+	protected $fileDirectory = null;
 
 	private static $inited = false;
 

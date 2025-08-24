@@ -73,12 +73,12 @@ function isOneDimensional( $array ){
 	return MaxTools\isOneDimensionalArray( $array ); }
 
 // get NEW-LINE : [ cli ? \n( PHP_EOL ) : <br />
-function Br( $c = 1 ) {
-	return MaxTools\Br( $c ); }
+function br( $c = 1 ) {
+	return MaxTools\br( $c ); }
 
 // check if we are in cli ( command line , terminal , ... )
-function IsCli() { 
-	return MaxTools\IsCli(); }
+function isCli() { 
+	return MaxTools\isCli(); }
 
 // get name of entering script file name ( start of php interpretation )
 function ScriptFile(){
@@ -102,6 +102,21 @@ function WebDomainAccess(){
 	return MaxTools\WebDomainFull();
 }
 
+// get web url of Entering file's path
+function WebPath(){
+	if ( defined( 'TWeb_Path' ) ) 
+		return TWeb_Path ;
+	return MaxTools\WebPath( TPath_Root );
+}
+
+// Get Web-Link ( Direct-Link ) of a file
+function FindWebPath( $address = null ){
+	MaxTools\FindWebPath( $address , TPath_Root ); }
+
+
+function ListMultipartUploads( $MPUF ){
+	return MaxTools\ListMultipartUploads( $MPUF ); }
+
 // convert english numbers to persian
 function PersianNumbers( $numsStr ){
 	return MaxTools\PersianNumbers( $numsStr ); }
@@ -114,172 +129,9 @@ function RealNumbers( $numsStr = null ){
 function RealPersian( $str ){
 	return MaxTools\RealPersian( $str ); }
 
-
 /****************************
 **** Custom Ted Function ****
 *****************************/
-// get web url of Entering file's path
-function WebPath(){
-
-	if ( defined( 'TWeb_Path' ) ) 
-		return TWeb_Path ;
-	
-	$host = ( isset( $_SERVER['SCRIPT_NAME'] ) ) ? $_SERVER['SCRIPT_NAME'] : null ;
-	if ( ! $host ) 
-		return __FILE__ ;
-
-	$host = str_ireplace( TPath_DS , '/' , dirname( $host ) ) ;
-	if ( $host === '/' ) 
-		return '/' ;
-
-	$path = null ;
-	$address = realpath( dirname( ScriptFile() ) );
-
-	if ( stristr( $address , TPath_Root ) ){
-
-		$path = str_ireplace( TPath_Root , '' , $address );
-		$path = str_ireplace( TPath_DS , '/' , $path );
-		$path = trim( $path , " /\\") ;
-
-		if ( strlen( $path ) == 0 ) $path = $host ;
-
-		else {
-
-			$e = explode( '/' , $path );
-
-			$sp = $host ;
-
-			foreach ($e as $value ) {
-				
-				$sp = str_replace( $value , '' , $sp );
-				$sp  = str_ireplace( "//" , '' , $sp );
-				$sp  = trim( $sp , " /\\") ;
-
-			} $path = $sp ;
-
-		}
-		
-	} else {
-			
-		$FilePath = explode( TPath_DS , $address );
-		$RootPath = explode( TPath_DS , TPath_Root );
-
-		foreach ( $RootPath as $key => $value ) 
-			foreach ( $FilePath as $key2 => $value2 ) 
-				if ( $value == $value2 ) 
-					unset( $FilePath[ $key2 ] , $RootPath[ $key ] ) ;
-
-		$sp = $host ;
-
-		foreach ( $FilePath as $key => $value) {
-
-			$replace = '' ;
-			
-			if ( isset( $RootPath[ $key ] ) ){
-
-				$replace = $RootPath[ $key ] ; 
-				unset( $RootPath[ $key ] );
-
-			} $sp = str_ireplace( $value , $replace , $sp );
-
-			$sp  = str_ireplace( "//" , '' , $sp );
-
-			$sp  = trim( $sp , " /\\") ;
-
-		} $sp .= '/' . join( $RootPath , '/' ) ;
-		
-		$path = $sp ;
-
-	} return '/' . trim( $path , " /\\" ) ;
-	
-}
-
-// Get Web-Link ( Direct-Link ) of a file
-function FindWebPath( $address = null , $roots = array() ){
-    
-	if ( ! file_exists( $address ) ) return false;
-    
-	$webAddress = '' ;
-	
-    //$WebRoot = TWeb_URL ;
-	$WebRoot = TWeb_HttpDomain . TWeb_Path ; 
-
-	if ( stristr( $address , TPath_Root ) ){
-		
-		$webAddress = str_ireplace( TPath_Root , '' , $address );
-		$webAddress = str_ireplace( TPath_DS , '/' , $webAddress );	
-		$webAddress = trim( $webAddress , " \\/");
-		$webAddress = $WebRoot . '/' . $webAddress;
-		
-	} else {
-	    
-	    // Find Base Web Break
-		$TedUrl = explode( "//" , $WebRoot , 2 ) ;
-		$http = $TedUrl[ 0 ] ;
-		unset( $TedUrl[ 0 ] );
-		$TedUrl = explode( '/' , $TedUrl[ 1 ] ) ;
-		$http .= "//" . $TedUrl[ 0 ] ;
-		unset( $TedUrl[ 0 ] );
-		
-		$dif = str_ireplace( $http , "" , $WebRoot );
-		$dif = trim( $dif , ' /' ); 
-		$dif = explode( '/' , $dif ); // Last Path
-
-		$FilePath = explode( TPath_DS , $address );
-		$RootPath = explode( TPath_DS , TPath_Root );
-		$Route = array();
-		$isPathClear = false ;
-		
-		foreach( $RootPath as $n => $v ) 
-		    if( isset( $FilePath[ $n ] ) ) if ( strtolower( $v ) == strtolower( $FilePath[ $n ] ) ){
-				
-			unset( $RootPath[ $n ] , $FilePath[ $n ] ) ;
-			
-			$Route[] = $v ;
-			
-			if( ! $isPathClear ) foreach( $dif as $np ) 
-                if( strtolower( $np ) == strtolower( $v ) )
-                    $isPathClear = true ;
-				
-		} // Route Now Contains Path To First Breaking Of Roots
-		
-		$FilePath = array_values( $FilePath ) ;
-		
-		foreach( $FilePath as $newPath ) 
-		    $Route[] = $newPath ;
-		
-		$TedUrl = array_values( $TedUrl ) ;
-		
-		if( ! $isPathClear ) // Not Same Path : Just Add FilePath To Http !
-		
-		    $http .= '/' . implode( '/' , $FilePath ) ;
-		
-		else foreach( $TedUrl as $k => $v ){
-			
-			$break = false ;
-			
-			foreach( $Route as $l => $p ){
-				
-				if ( $v == $p ) {
-					
-					$np = array_slice( $Route , $l ) ;
-					$http .= '/' . implode( '/' , $np ) ;
-					$break = true ;
-					break;
-					
-				}
-				
-			} if ( $break ) 
-				break ;
-			else $http .= '/' . $v ;
-			
-		} $webAddress = $http ;
-		
-	} $webAddress = trim( $webAddress , " /\\" ) ;
-	
-	return $webAddress ;
-
-}
 
 // Find user intefaces that are enabled for $AppName
 function FindUserInterfaces( $root = null , $AppName = null ){
@@ -387,43 +239,6 @@ function FindRouteElements( $Args = array() ){
 	} array_push( $Route , $State ) ;
 
 	return [ $Route , $Extra ] ;
-
-}
-
-// Handle Multipart file uploads ( just give the upload handle )
-function ListMultipartUploads( $MPUF ) {
-
-	if ( ! isset( $MPUF[ 'name' ] ) ) return $MPUF ;
-
-  	if ( ! is_array( $MPUF[ 'name' ] ) ) return array( $MPUF ) ;
-
-	$len = count( $MPUF[ 'name' ] ) - 1 ;
-
-	$nMPUF = array() ;
-
-	for ( $i = 0 ; $i <= $len ; $i++ ) { 
-
-	$nf = array() ;
-
-	if ( isset( $MPUF[ 'name' ][$i] ) )   
-	  $nf['name']   = $MPUF[ 'name' ][$i] ;
-
-	if ( isset( $MPUF[ 'type' ] ) && isset( $MPUF[ 'type' ][$i] ) )   
-	  $nf['type']   = $MPUF[ 'type' ][$i] ;
-
-	if ( isset( $MPUF[ 'tmp_name' ] ) && isset( $MPUF[ 'tmp_name' ][$i] ) ) 
-	  $nf['tmp_name' ] = $MPUF[ 'tmp_name' ][$i] ;
-
-	if ( isset( $MPUF[ 'error' ] ) && isset( $MPUF[ 'error' ][$i] ) ) 
-	  $nf['error']  = $MPUF[ 'error' ][$i] ;
-
-	if ( isset( $MPUF[ 'size' ] ) && isset( $MPUF[ 'size' ][$i] ) ) 
-	  $nf[ 'size' ]   = $MPUF[ 'size' ][$i] ;
-
-	if ( count( $nf ) < 4  ) continue ;
-	if ( isset( $nf['error'] ) && $nf['error'] === 0 ) $nMPUF[$i] = $nf ;
-
-	} return $nMPUF ;
 
 }
 

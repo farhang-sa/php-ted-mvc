@@ -18,8 +18,14 @@ mb_internal_encoding( 'UTF-8' );
 // Set HTTP Output Document's Character Encoding To UTF-8
 mb_http_output( 'UTF-8' );
 
+// Set some messages
+define( 'TAccess' , 'Access Denied' );
+define( 'TDisable' , 'Requested file is not available' );
+define( 'TClassDamaged' , 'Requested class is damaged' );
+define( 'TClassMissing' , 'Requested class is not available' );
+
 // Check Start Of The Execution , TExec Not Defined , Quit The Application
-defined( 'TExec' ) or die( 'Access Denied' );
+defined( 'TExec' ) or die( TAccess );
 
 // Check The Directory Separator
 defined( 'TPath_DS' ) or define( 'TPath_DS' , DIRECTORY_SEPARATOR );
@@ -35,30 +41,29 @@ foreach( $scn as $DirName ){
 	
 	$newDirAddress = TPath_Base . TPath_DS . $DirName ;
 	
-	$continue = false ;
+	if ( $DirName == '.' || $DirName == '..' ) 
+		continue ;
 	
-	if ( $DirName == "." || $DirName == ".." ) $continue = true ;
-	
-	else if ( ! is_dir( $newDirAddress ) ) $continue = true ;
-	
-	if ( $continue ) continue ;
+	else if ( ! is_dir( $newDirAddress ) ) 
+		continue ;
 	
 	$newConsName = 'TPath_Base' . ucfirst( $DirName ) ;
-	
-	if ( ! defined( $newConsName ) ) define( $newConsName , $newDirAddress );
+	if ( ! defined( $newConsName ) ) 
+		define( $newConsName , $newDirAddress );
 	
 }
 
-// Load Ted Basic Functions
+// Load ted basic functions
 \MaxTools\Import( 'Statics.Functions' , TPath_Base );
 
-// Define The Root Execution Directory
+// Define the root execution directory
 defined( 'TPath_Root' ) or define( 'TPath_Root' , dirname( ScriptFile() ) );
 
-// Define The Original Execution File
-defined( 'TPath_IndexPath' ) or define( 'TPath_IndexPath' , TPath_Root . TPath_DS . basename( ScriptFile() ) );
+// Define the original execution file PATH
+defined( 'TPath_IndexPath' ) or 
+	define( 'TPath_IndexPath' , TPath_Root . TPath_DS . basename( ScriptFile() ) );
 
-// Define The Original Execution File
+// Define the original execution file NAME
 defined( 'TPath_Index' ) or define( 'TPath_Index' , basename( TPath_IndexPath ) );
 defined( 'TPath_IndexFile' ) or define( 'TPath_IndexFile' , TPath_Index );
 
@@ -69,9 +74,9 @@ define( 'TWeb_Schame' , WebSchame() );
 define( 'TWeb_Domain' , WebDomain() ); 
 
 // the TWeb_HttpDomain constant : https://ted.com
-define( 'TWeb_HttpDomain' , TWeb_Schame . "://" . TWeb_Domain );
+define( 'TWeb_HttpDomain' , TWeb_Schame . '://' . TWeb_Domain );
 
-// the TWeb_DomainAccess constant : http://user:pass@ted.com:8081
+// the TWeb_DomainAccess constant : http://user@ted.com:8081
 define( 'TWeb_DomainAccess' , WebDomainAccess() ); 
 
 // the TWeb_Path constant : /tedpath/
@@ -79,7 +84,7 @@ define( 'TWeb_Path' , WebPath() );
 define( 'TWeb_Script' , TWeb_Path );
 define( 'TWeb_ScriptPath' , TWeb_Path );
 
-// the TWeb_URL constant : http://user:pass@ted.com:8081/tedpath/
+// the TWeb_URL constant : http://user@ted.com:8081/tedpath/
 $path = TWeb_DomainAccess . TWeb_Path ;
 $path = trim( $path , " \\/" );
 
@@ -108,19 +113,18 @@ define( 'TWeb_wwwRoot' , TWeb_URL );
 define( 'TWeb_wwwroot' , TWeb_URL ); 
 define( 'TWeb_WWWROOT' , TWeb_URL ); 
 
-// the TWeb_Index constant : http://user:pass@ted.com:8081/tedpath/index-file.php
-define( 'TWeb_Index' , trim( TWeb_URL . "/" . TPath_Index , " \\/" ) ); 
-
-define( 'TAccess' 			, " Access Denied To This Path" );
-define( 'TDisable' 			, " Requested File Is Not Available" );
-define( 'TClassDamaged' 	, " Requested Class Is Damaged" );
-define( 'TClassMissing' 	, " Requested Class Is Not Available" );
+// the TWeb_Index constant : http://user@ted.com:8081/tedpath/index-file.php
+define( 'TWeb_Index' , trim( TWeb_URL . '/' . TPath_Index , " \\/" ) ); 
+define( 'TWeb_index' , TWeb_Index ); 
 
 // Load System Statics
-Import( 'Base.Statics.Intel' );
+Import( 'Statics.Intel' , TPath_Base );
 
 // Load System Abstracts
-Import( 'Base.Abstracts.*' );
+Import( 'Abstracts.*' , TPath_Base );
+
+// Load System Interfaces
+Import( 'Interfaces.*' , TPath_Base );
 
 // Initialise Ted's Static Classes
 Intel::Initialise(); /// User Related Intel Worker
@@ -140,7 +144,7 @@ class Ted {
 	public static function infophp(){ self::info(); }
 	public static function info(){
 
-		if( IsCli() )
+		if( isCli() )
 			return self::infocli();
 
 		// style
@@ -148,12 +152,12 @@ class Ted {
 		
 		// create table
 		print '<table class="table table-striped ted">' ;
-		print '<tr"><th colspan=2>Basic PHPINFO()</th></tr>';
+		print '<tr><th colspan=2>Basic PHPINFO()</th></tr>';
 		print '<tr><th>Item</th><th>Value</th></tr>';
 		
 		// PHPINFO Definitions
 		$exten = get_loaded_extensions();
-		$extel = "" ;
+		$extel = '' ;
 		for($i = 0 ; $i <= count( $exten ) - 1 ; $i++ ) {
 			$extel .= $exten[$i] . ' - ' ;
 			if( $i !== 0 && $i%5 === 0 )
@@ -193,13 +197,13 @@ class Ted {
 				$exe = str_ireplace( "\n", '<br />', $exe );
 				$vars[ $tool ] = $exe ;
 			}
-		} catch (Exception $e) { print 'Command exec error!' ; }
+		} catch (Exception $e) { print 'Command exec error' ; }
 			
 		foreach( $vars as $name => $val )
 			print "<tr><td>{$name}</td><td>{$val}</td></tr>" ;
 
 		// Ted Definitions
-		print '<tr"><th colspan=2>Ted Definitions</th></tr>';
+		print '<tr><th colspan=2>Ted Definitions</th></tr>';
 		print '<tr><th>Defined</th><th>Value</th></tr>';
 		$vars = array( 
 			'Ted Version' 		=> 'v' . TVersion ,
@@ -248,7 +252,7 @@ class Ted {
 		
 		// create table
 		print '<table class="ted">' ;
-		print '<tr"><th colspan=4>php.ini details</th></tr>';
+		print '<tr><th colspan=4>php.ini details</th></tr>';
 		print '<tr><th>variable</th><th>global value</th><th>local value</th><th>access</th></tr>';
 		foreach ($ini as $k => $v )
 			print '<tr><th>' . $k . '</th><th>' . $v['global_value'] . '</th>' .
@@ -299,7 +303,7 @@ class Ted {
 		if( $execf ) foreach ($cmd as $tool ) {
 			$exe = null ;
 			$exf = null ;
-			exec( $tool . ' --version &' , $exe  , $exf );
+			@exec( $tool . ' --version &' , $exe  , $exf );
 			$exe = empty( $exe ) ? '-----' : $exe[ count( $exe ) - 1 ];
 			if( stristr( $exe , '--version' ) )
 				$exe = explode( '--version' , $exe )[1] ;
@@ -309,7 +313,9 @@ class Ted {
 
 		print PHP_EOL . PHP_EOL . '********************************' . PHP_EOL ;
 		foreach( $vars as $k => $v ){
-			print '** ' . $k . " -> \t" . $v . PHP_EOL ;
+			if(strlen( $k ) < 6 )
+				print '** ' . $k . "\t\t -> \t" . $v . PHP_EOL ;
+			else print '** ' . $k . "\t -> \t" . $v . PHP_EOL ;
 			usleep( 50000 );
 		} print '********************************' . PHP_EOL ;
 

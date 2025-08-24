@@ -12,7 +12,8 @@ abstract class TedInterface {
 
 	public abstract function Response();
 	
-	public function __construct( $App = null ){ $this->setApp( $App ); }
+	public function __construct( $App = null ){ 
+		$this->setApp( $App ); }
 	
 	protected function setApp( $AppName = null , $InterfaceSearchList = array() ){
 

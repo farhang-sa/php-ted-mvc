@@ -8,10 +8,7 @@ class inputPlugin extends Ted\Plugin {
 	protected $AppStorageName = null ;
 
 	public function __construct( ){
-		
-		$this->AppStorageName = 'DEVELOPER-' . $this->App() ;
-		
-	}
+		$this->AppStorageName = 'DEVELOPER-' . $this->App() ; }
 	
 	public function __get( $name ) {
 
