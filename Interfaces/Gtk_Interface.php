@@ -200,7 +200,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 	
-	private final function init( ) {
+	private function init( ) {
 
 		self::$inited = true;
 		
