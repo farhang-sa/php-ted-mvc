@@ -168,6 +168,7 @@ class Ted {
 		} $extel = trim( $extel , ' -' );
 		$execs = ExecFunctions();
 		$execf = ! empty( $execs ) ? $execs[0] : null ;
+		$execf = TExec_Functions === 'on' ? $execf : null ;
 		$vars = array( 
 			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
 			'Machine Name/IP' => gethostname() . ' / ' . Intel::GetVar( 'SERVER_ADDR' , 'UNKOWN IP' , 'SERVER' ) ,
@@ -293,7 +294,7 @@ class Ted {
 		} $extel = trim( $extel , ' -' );
 		$execs = ExecFunctions();
 		$execf = ! empty( $execs ) ? $execs[0] : null ;
-		$execf = TExec_Functions === 'on' : $execf : null ;
+		$execf = TExec_Functions === 'on' ? $execf : null ;
 		$vars = array( 
 			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
 			'Machine Name' => gethostname() ,
