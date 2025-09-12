@@ -6,6 +6,9 @@ if( defined( 'TVersion' ) )
 // Package Version 
 define( 'TVersion' , '1' );
 
+// define exec function on/off
+defined( 'TExec_Functions' ) or define( 'TExec_Functions' , 'off' );
+
 // Set Ini Use Cookies
 ini_set('session.cookie_secure', 0 );
 
@@ -290,6 +293,7 @@ class Ted {
 		} $extel = trim( $extel , ' -' );
 		$execs = ExecFunctions();
 		$execf = ! empty( $execs ) ? $execs[0] : null ;
+		$execf = TExec_Functions === 'on' : $execf : null ;
 		$vars = array( 
 			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
 			'Machine Name' => gethostname() ,
