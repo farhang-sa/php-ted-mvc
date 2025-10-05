@@ -36,24 +36,24 @@ defined( 'TPath_DS' ) or define( 'TPath_DS' , DIRECTORY_SEPARATOR );
 // Check The Ted Base Constant
 defined( 'TPath_Base' ) or define( 'TPath_Base' , realpath( __DIR__ ) );
 
-// Section Below Loades Every Deirectory In TPath_Base And Sets 
+// Section Below Loades Every Deirectory In TPath_Base And Sets
 // A Constant Like "TPath_BaseName" For It's Directory Address
 $scn = scandir( TPath_Base );
 
 foreach( $scn as $DirName ){
-	
+
 	$newDirAddress = TPath_Base . TPath_DS . $DirName ;
-	
-	if ( $DirName == '.' || $DirName == '..' ) 
+
+	if ( $DirName == '.' || $DirName == '..' )
 		continue ;
-	
-	else if ( ! is_dir( $newDirAddress ) ) 
+
+	else if ( ! is_dir( $newDirAddress ) )
 		continue ;
-	
+
 	$newConsName = 'TPath_Base' . ucfirst( $DirName ) ;
-	if ( ! defined( $newConsName ) ) 
+	if ( ! defined( $newConsName ) )
 		define( $newConsName , $newDirAddress );
-	
+
 }
 
 // Load ted basic functions
@@ -63,7 +63,7 @@ foreach( $scn as $DirName ){
 defined( 'TPath_Root' ) or define( 'TPath_Root' , dirname( ScriptFile() ) );
 
 // Define the original execution file PATH
-defined( 'TPath_IndexPath' ) or 
+defined( 'TPath_IndexPath' ) or
 	define( 'TPath_IndexPath' , TPath_Root . TPath_DS . basename( ScriptFile() ) );
 
 // Define the original execution file NAME
@@ -74,13 +74,13 @@ defined( 'TPath_IndexFile' ) or define( 'TPath_IndexFile' , TPath_Index );
 define( 'TWeb_Schame' , WebSchame() );
 
 // the TWeb_Domain constant : ted.com
-define( 'TWeb_Domain' , WebDomain() ); 
+define( 'TWeb_Domain' , WebDomain() );
 
 // the TWeb_HttpDomain constant : https://ted.com
 define( 'TWeb_HttpDomain' , TWeb_Schame . '://' . TWeb_Domain );
 
 // the TWeb_DomainAccess constant : http://user@ted.com:8081
-define( 'TWeb_DomainAccess' , WebDomainAccess() ); 
+define( 'TWeb_DomainAccess' , WebDomainAccess() );
 
 // the TWeb_Path constant : /tedpath/
 define( 'TWeb_Path' , WebPath() );
@@ -103,22 +103,22 @@ if( TWeb_Schame === 'https' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
 if( TWeb_Schame === 'http' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
 	$path = substr_replace( $path , TWeb_HttpDomain , 0 , strlen( TWeb_HttpDomain . ':80' ) );
 
-define( 'TWeb_URL' , $path ); 
-define( 'TWeb_url' , TWeb_URL ); 
-define( 'TWeb_UrlRoot' , TWeb_URL ); 
+define( 'TWeb_URL' , $path );
+define( 'TWeb_url' , TWeb_URL );
+define( 'TWeb_UrlRoot' , TWeb_URL );
 define( 'TWeb_Urlroot' , TWeb_URL );
 define( 'TWeb_urlRoot' , TWeb_URL );
 define( 'TWeb_urlroot' , TWeb_URL );
 define( 'TWeb_URLROOT' , TWeb_URL );
-define( 'TWeb_WWWRoot' , TWeb_URL ); 
-define( 'TWeb_WwwRoot' , TWeb_URL ); 
-define( 'TWeb_wwwRoot' , TWeb_URL ); 
-define( 'TWeb_wwwroot' , TWeb_URL ); 
-define( 'TWeb_WWWROOT' , TWeb_URL ); 
+define( 'TWeb_WWWRoot' , TWeb_URL );
+define( 'TWeb_WwwRoot' , TWeb_URL );
+define( 'TWeb_wwwRoot' , TWeb_URL );
+define( 'TWeb_wwwroot' , TWeb_URL );
+define( 'TWeb_WWWROOT' , TWeb_URL );
 
 // the TWeb_Index constant : http://user@ted.com:8081/tedpath/index-file.php
-define( 'TWeb_Index' , trim( TWeb_URL . '/' . TPath_Index , " \\/" ) ); 
-define( 'TWeb_index' , TWeb_Index ); 
+define( 'TWeb_Index' , trim( TWeb_URL . '/' . TPath_Index , " \\/" ) );
+define( 'TWeb_index' , TWeb_Index );
 
 // Load System Statics
 Import( 'Statics.Intel' , TPath_Base );
@@ -152,12 +152,12 @@ class Ted {
 
 		// style
 		self::printStyle();
-		
+
 		// create table
 		print '<table class="table table-striped ted">' ;
 		print '<tr><th colspan=2>Basic PHPINFO()</th></tr>';
 		print '<tr><th>Item</th><th>Value</th></tr>';
-		
+
 		// PHPINFO Definitions
 		$exten = get_loaded_extensions();
 		$extel = '' ;
@@ -169,18 +169,22 @@ class Ted {
 		$execs = ExecFunctions();
 		$execf = ! empty( $execs ) ? $execs[0] : null ;
 		$execf = TExec_Functions === 'on' ? $execf : null ;
-		$vars = array( 
+		$sips = implode( ' / ' , gethostbynamel( gethostname() ) );
+		$seip = trim( Intel::GetVar( 'SERVER_ADDR' , 'UNKOWN IP' , 'SERVER' ) );
+		if( stristr( $sips , $seip) === false )
+			$sips .= ' / ' . $seip ;
+		$vars = array(
 			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
-			'Machine Name/IP' => gethostname() . ' / ' . Intel::GetVar( 'SERVER_ADDR' , 'UNKOWN IP' , 'SERVER' ) ,
+			'Machine Name/IP' => gethostname() . ' / ' . $sips ,
 			'Server' => Intel::GetVar( 'SERVER_SOFTWARE' , 'UNKOWN Server Software' , 'SERVER' ) ,
 			'Who Am I' => get_current_user() ,
 			'PHP Version' => defined( 'PHP_VERSION' ) ? PHP_VERSION : phpversion() ,
 			'<b>Exec</b>' => '<b>' . join( ' - ' , $execs ) . '</b>' ,
-			'Extensions' => $extel  
+			'Extensions' => $extel
 		);
-		$ini = array( 
-			'allow_url_fopen' , 'allow_url_include' , 
-			'max_execution_time' , 'max_input_time' , 
+		$ini = array(
+			'allow_url_fopen' , 'allow_url_include' ,
+			'max_execution_time' , 'max_input_time' ,
 			'post_max_size' , 'upload_max_filesize' , 'max_file_uploads' );
 		if( $ini ) foreach ($ini as $item ) {
 			$val = ini_get( $item );
@@ -202,14 +206,14 @@ class Ted {
 				$vars[ $tool ] = $exe ;
 			}
 		} catch (Exception $e) { print 'Command exec error' ; }
-			
+
 		foreach( $vars as $name => $val )
 			print "<tr><td>{$name}</td><td>{$val}</td></tr>" ;
 
 		// Ted Definitions
 		print '<tr><th colspan=2>Ted Definitions</th></tr>';
 		print '<tr><th>Defined</th><th>Value</th></tr>';
-		$vars = array( 
+		$vars = array(
 			'Ted Version' 		=> 'v' . TVersion ,
 			'TPath_Base' 		=> TPath_Base ,
 			'TPath_Root' 	  	=> TPath_Root ,
@@ -253,7 +257,7 @@ class Ted {
 
 		// style
 		self::printStyle();
-		
+
 		// create table
 		print '<table class="ted">' ;
 		print '<tr><th colspan=4>php.ini details</th></tr>';
@@ -295,9 +299,13 @@ class Ted {
 		$execs = ExecFunctions();
 		$execf = ! empty( $execs ) ? $execs[0] : null ;
 		$execf = TExec_Functions === 'on' ? $execf : null ;
+		$sips = implode( ' / ' , gethostbynamel( gethostname() ) );
+		$seip = trim( Intel::GetVar( 'SERVER_ADDR' , 'UNKOWN IP' , 'SERVER' ) );
+		if( stristr( $sips , $seip) === false )
+			$sips .= ' / ' . $seip ;
 		$vars = array( 
 			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
-			'Machine Name' => gethostname() ,
+			'Machine Name/IP' => gethostname() . ' / ' . $sips ,
 			'Who Am I' => get_current_user() ,
 			'PHP Version' => defined( 'PHP_VERSION' ) ? PHP_VERSION : phpversion() ,
 			'Exec' => join( ' - ' , $execs ) . PHP_EOL ,

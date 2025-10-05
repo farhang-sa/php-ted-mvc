@@ -62,7 +62,7 @@ class sessionPlugin extends Ted\Plugin {
 	}
 
 	public function start( $name = null , $id = null , $cookies = array() , $reset = false ){ 
-	    
+
 		if( $reset ) { // Reset Old Session
 		    
 		    $this->oldId = session_id();
@@ -90,12 +90,31 @@ class sessionPlugin extends Ted\Plugin {
 		$name = ( $name !== null ) ? $name : "TedSsid" ;
 		$this->Name( $name );
 
-		$id = ( $id !== null ) ? $id : null ;
+		$id = ( $id !== null ) ? $id : $this->findId( $name );
 		$this->Id( $id ) ;
 		
 		session_start();
 
 	}
+
+	
+    public function findId( $name ){
+
+        $headers = getallheaders();
+        $cookies = isset( $headers['Cookie'] ) ? $headers['Cookie'] : null ;
+        $cookies = ! $cookies && isset( $headers['Set-Cookie'] ) ? $headers['Set-Cookie'] : null ;
+
+        if( $cookies === null )
+            return null ;
+
+        $cookies = explode( ';' , $cookies );
+        foreach( $cookies as $cookie )
+            if( stristr( $cookie , $name . '=' ) !== false )
+                return trim( str_ireplace( $cookie , $name . '=' , '' ) , ' ' );
+
+        return null ;
+
+    }
 
 	public function stop(){ session_write_close(); }
 

@@ -224,6 +224,8 @@ final class Intel {
 
 			$magicUrl = ( !$magicUrl && isset($_SERVER["SCRIPT_NAME"] ) ) ? $_SERVER["SCRIPT_NAME"] : $magicUrl ;
 
+			$magicUrl = str_replace( '/' . TPath_Index , '' , $magicUrl );
+
 			$Reqs["GET"]["url"] = $magicUrl ;
 
 			unset( $magicUrl ) ;
@@ -234,11 +236,15 @@ final class Intel {
 			
 		} self::$GLOBALS = $Reqs;
 		
-		if ( self::getVar( 'url' ) ) {
-			
-			self::setVar( "url" , str_replace( "/" . TPath_Index , "" , self::getVar( 'url' ) ) , 'GET' , true );
+		$url = self::GetVar( 'url' , null , 'GET' , false );
+		if ( $url ) 
+			self::setVar( 'url' , str_replace( '/' . TPath_Index , '' , $url ) , 'GET' , true );
 		
-		} unset( $Reqs );
+		$url = self::GetVar( 'NewUrl' , null , 'GET' , false );
+		if ( $url ) 
+			self::setVar( 'NewUrl' , str_replace( '/' . TPath_Index , '' , $url ) , 'GET' , true );
+
+		unset( $Reqs );
 		
 	}
 
