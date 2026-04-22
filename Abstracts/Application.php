@@ -8,6 +8,7 @@ abstract class Application extends AppBase {
 
 	protected $AppName ;
 	protected $AppRoot ;
+	protected $AppWww ;
 
 	protected $AppError ;
 	protected $AppComp ;

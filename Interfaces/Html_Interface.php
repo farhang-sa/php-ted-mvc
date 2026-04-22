@@ -583,9 +583,11 @@ class Html_Interface extends Ted\TedInterface {
 			
 			$file = Ted\FindFile( $rootDire , $name );
 			
-			if ( $file && is_file( $file ) ) 
-
-				return Ted\FindWebPath( $file );
+			if ( $file && is_file( $file ) ) { // make relative
+				$file = Ted\FindWebPath( $file );
+				$file = str_ireplace( TWeb_DomainAccess , '' , $file ) ;
+				return '/' . trim( $file , ' \\/' );
+            }
 
 		} return null ;
 		

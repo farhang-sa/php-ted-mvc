@@ -85,8 +85,8 @@ function ScriptFile(){
 	return MaxTools\ScriptFile(); }
 
 // get web schame ( http , https , ...)
-function WebSchame(){
-	return MaxTools\WebSchame(); }
+function WebScheme(){
+	return MaxTools\WebScheme(); }
 
 // get domain name
 function WebDomain(){
@@ -101,6 +101,10 @@ function WebDomainAccess(){
 		return TWeb_DomainAccess ;
 	return MaxTools\WebDomainFull();
 }
+
+// get full domain name
+function HostIPList(){
+	return MaxTools\HostIPList(); }
 
 // get web url of Entering file's path
 function WebPath(){

@@ -162,7 +162,7 @@ class sessionPlugin extends Ted\Plugin {
 
 		$params = ( isset( $params[0] ) && is_array( $params[0] ) && count( $params ) == 1 ) ? $params[0] : $params;
 
-		$secure = ( TWeb_Schame === "https" ) ? true : false ;
+		$secure = ( TWeb_Scheme === "https" ) ? true : false ;
 
 		$args = array( "600" , TWeb_Path , TWeb_Domain , $secure , true ) ;
 

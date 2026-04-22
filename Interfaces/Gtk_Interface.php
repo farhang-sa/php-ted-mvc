@@ -30,7 +30,7 @@ class Gtk_Interface extends Ted\TedInterface {
 
 	private static $body;
 
-	public final function App( $App = null ) {
+	public function App( $App = null ) {
 
 		if ( is_object( $App ) && $App instanceof TED_Application ){
 			
@@ -44,7 +44,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function Root( $Root = null ) {
+	public function Root( $Root = null ) {
 
 		if ( is_dir( $Root ) ){
 			
@@ -58,31 +58,31 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function wui(){
+	public function wui(){
 	
 		return $this->Www ;
 	
 	}
 	
-	public final function Www(){
+	public function Www(){
 		
 		return $this->Www ;
 		
 	}
 
-	public final function WebURL(){
+	public function WebURL(){
 	
 		return $this->Www ;
 	
 	}
 
-	public final function URL(){
+	public function URL(){
 	
 		return $this->Www ;
 	
 	}
 	
-	public final function Response( $VIEW = null , $CODE = null , $MESSAGES = null , $DATA = null , $DUMP = null , $NEED = null ){
+	public function Response( $VIEW = null , $CODE = null , $MESSAGES = null , $DATA = null , $DUMP = null , $NEED = null ){
 	
 		$HtmlRoot = $this->pageDirectory ; 
 		
@@ -228,7 +228,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function tag2Head( $string = null ) {
+	public function tag2Head( $string = null ) {
 
 		$string = ( string ) $string;
 		
@@ -244,7 +244,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function head( $string = null ) {
+	public function head( $string = null ) {
 
 		$string = ( string ) $string;
 		
@@ -256,7 +256,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function title( $title = null ) {
+	public function title( $title = null ) {
 
 		if ( ! isset( self::$head['tag']['title'] ) ) self::$head['tag']['title'] = null;
 		
@@ -266,7 +266,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function charset( $char = 'UTF-8' ) {
+	public function charset( $char = 'UTF-8' ) {
 
 		self::$head['tag']['charset'] = "<meta charset='{$char}' />";
 		
@@ -276,7 +276,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function keyword( $keys = null ) {
+	public function keyword( $keys = null ) {
 
 		$this->meta( 'keywords' , $keys );
 		
@@ -284,7 +284,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function description( $desc = null ) {
+	public function description( $desc = null ) {
 
 		$this->meta( 'description' , $desc );
 		
@@ -292,7 +292,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function generator( $generator ) {
+	public function generator( $generator ) {
 
 		$this->meta( 'generator' , $generator );
 		
@@ -300,7 +300,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function meta( $name = null , $content = null ) {
+	public function meta( $name = null , $content = null ) {
 
 		if ( $name && $content ) {
 			
@@ -314,7 +314,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function tag2Body( $string = null ) {
+	public function tag2Body( $string = null ) {
 
 		$string = ( string ) $string;
 		
@@ -328,7 +328,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function body( $string = null ) {
+	public function body( $string = null ) {
 
 		$string = ( string ) $string;
 		
@@ -340,7 +340,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function js2head( $name ) {
+	public function js2head( $name ) {
 		
 		$save = basename( $name ) ;
 		
@@ -366,7 +366,7 @@ class Gtk_Interface extends Ted\TedInterface {
 
 	}
 
-	public final function js2body( $name ) {
+	public function js2body( $name ) {
 		
 		$save = basename( $name ) ;
 		
@@ -392,7 +392,7 @@ class Gtk_Interface extends Ted\TedInterface {
 		
 	}
 
-	public final function js( $name , $toHead = true ) {
+	public function js( $name , $toHead = true ) {
 
 		if ( $toHead ) return $this->js2head( $name );
 		
@@ -400,7 +400,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function ExternalJs( $address , $toHead = true ) {
+	public function ExternalJs( $address , $toHead = true ) {
 		
 		$save = basename( $address ) ;
 
@@ -422,7 +422,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function Css( $name ) {
+	public function Css( $name ) {
 		
 		$save = basename( $name ) ;
 		
@@ -448,7 +448,7 @@ class Gtk_Interface extends Ted\TedInterface {
 		
 	}
 
-	public final function ExternalCss( $address ) {
+	public function ExternalCss( $address ) {
 		
 		$save = basename( $address ) ;
 		
@@ -460,7 +460,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function ReturnHead( ) {
+	public function ReturnHead( ) {
 
 		$cCom = $this->App->AppComp();
 		
@@ -498,7 +498,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function ReturnBody( ) {
+	public function ReturnBody( ) {
 
 		$cCom = $this->App->AppComp();
 		
@@ -528,7 +528,7 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function media( $direc , $name , $root = null ) {
+	public function media( $direc , $name , $root = null ) {
 
 		$OriginalFile 	= null;
 		
@@ -586,7 +586,7 @@ class Gtk_Interface extends Ted\TedInterface {
 		
 	}
 
-	public final function getWebPath( $address ) {
+	public function getWebPath( $address ) {
 
 		$appFiles = str_ireplace( TED_Root , '' , $address );
 		
@@ -600,13 +600,13 @@ class Gtk_Interface extends Ted\TedInterface {
 	
 	}
 
-	public final function FindNewFile( $root , $name ) {
+	public function FindNewFile( $root , $name ) {
 
 		return self::FindFile( $root , $name );
 	
 	}
 
-	public static final function FindFile( $root , $name ) {
+	public static function FindFile( $root , $name ) {
 
 		$original = TED_FindMeFile( $root , $name );
 		

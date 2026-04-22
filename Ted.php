@@ -70,14 +70,14 @@ defined( 'TPath_IndexPath' ) or
 defined( 'TPath_Index' ) or define( 'TPath_Index' , basename( TPath_IndexPath ) );
 defined( 'TPath_IndexFile' ) or define( 'TPath_IndexFile' , TPath_Index );
 
-// the TWeb_Schame constant : http/https
-define( 'TWeb_Schame' , WebSchame() );
+// the TWeb_Scheme constant : http/https
+define( 'TWeb_Scheme' , WebScheme() );
 
 // the TWeb_Domain constant : ted.com
 define( 'TWeb_Domain' , WebDomain() );
 
 // the TWeb_HttpDomain constant : https://ted.com
-define( 'TWeb_HttpDomain' , TWeb_Schame . '://' . TWeb_Domain );
+define( 'TWeb_HttpDomain' , TWeb_Scheme . '://' . TWeb_Domain );
 
 // the TWeb_DomainAccess constant : http://user@ted.com:8081
 define( 'TWeb_DomainAccess' , WebDomainAccess() );
@@ -92,15 +92,15 @@ $path = TWeb_DomainAccess . TWeb_Path ;
 $path = trim( $path , " \\/" );
 
 // clean port 443 for https default port!
-if( TWeb_Schame === 'https' && strpos( $path , TWeb_HttpDomain . ':443' ) === 0 )
+if( TWeb_Scheme === 'https' && strpos( $path , TWeb_HttpDomain . ':443' ) === 0 )
 	$path = substr_replace( $path , TWeb_HttpDomain , 0 , strlen( TWeb_HttpDomain . ':443' ) );
 
 // clean port 80 for https default port!
-if( TWeb_Schame === 'https' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
+if( TWeb_Scheme === 'https' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
 	$path = substr_replace( $path , TWeb_HttpDomain , 0 , strlen( TWeb_HttpDomain . ':80' ) );
 
 // clean port 80 for http default port!
-if( TWeb_Schame === 'http' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
+if( TWeb_Scheme === 'http' && strpos( $path , TWeb_HttpDomain . ':80' ) === 0 )
 	$path = substr_replace( $path , TWeb_HttpDomain , 0 , strlen( TWeb_HttpDomain . ':80' ) );
 
 define( 'TWeb_URL' , $path );
@@ -119,6 +119,9 @@ define( 'TWeb_WWWROOT' , TWeb_URL );
 // the TWeb_Index constant : http://user@ted.com:8081/tedpath/index-file.php
 define( 'TWeb_Index' , trim( TWeb_URL . '/' . TPath_Index , " \\/" ) );
 define( 'TWeb_index' , TWeb_Index );
+// the TWeb_RelativeIndex constant : /tedpath/index-file.php
+define( 'TWeb_RelativeIndex' , '/' . trim( TWeb_Path . '/' . TPath_Index , ' /\\' ) );
+define( 'TWeb_IndexRelative' , '/' . trim( TWeb_Path . '/' . TPath_Index , ' /\\' ) );
 
 // Load System Statics
 Import( 'Statics.Intel' , TPath_Base );
@@ -169,10 +172,7 @@ class Ted {
 		$execs = ExecFunctions();
 		$execf = ! empty( $execs ) ? $execs[0] : null ;
 		$execf = TExec_Functions === 'on' ? $execf : null ;
-		$sips = implode( ' / ' , gethostbynamel( gethostname() ) );
-		$seip = trim( Intel::GetVar( 'SERVER_ADDR' , 'UNKOWN IP' , 'SERVER' ) );
-		if( stristr( $sips , $seip) === false )
-			$sips .= ' / ' . $seip ;
+		$sips = implode( ' / ' , HostIPList() );
 		$vars = array(
 			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
 			'Machine Name/IP' => gethostname() . ' / ' . $sips ,
@@ -220,7 +220,7 @@ class Ted {
 			'TPath_IndexPath' 	=> TPath_IndexPath ,
 			'TPath_Index' 	  	=> TPath_Index ,
 			'TPath_IndexFile' 	=> TPath_IndexFile ,
-			'TWeb_Schame' 	  	=> TWeb_Schame ,
+			'TWeb_Scheme' 	  	=> TWeb_Scheme ,
 			'TWeb_Domain' 		=> TWeb_Domain ,
 			'TWeb_HttpDomain' 	=> TWeb_HttpDomain ,
 			'TWeb_DomainAccess' => TWeb_DomainAccess ,
@@ -299,10 +299,7 @@ class Ted {
 		$execs = ExecFunctions();
 		$execf = ! empty( $execs ) ? $execs[0] : null ;
 		$execf = TExec_Functions === 'on' ? $execf : null ;
-		$sips = implode( ' / ' , gethostbynamel( gethostname() ) );
-		$seip = trim( Intel::GetVar( 'SERVER_ADDR' , 'UNKOWN IP' , 'SERVER' ) );
-		if( stristr( $sips , $seip) === false )
-			$sips .= ' / ' . $seip ;
+		$sips = implode( ' / ' , HostIPList() ) ;
 		$vars = array( 
 			'Machine' => str_ireplace( gethostname() , '' , php_uname() ) ,
 			'Machine Name/IP' => gethostname() . ' / ' . $sips ,

@@ -49,17 +49,20 @@ abstract class TedInterface {
 
 	public function LinkRoute( $Component = null ){
 
-		if ( ! $Component ) return $this->App()->AppWww() ;
+		$relative = trim( TWeb_Path . '/' . TPath_Index , '/' ) ; // [path/index.php]
+		$Link = $this->App()->AppWww() . '/' ; // [http[s]://name.domain/path/index.php/]
 
-		$Component = str_ireplace( "/" , DIRECTORY_SEPARATOR , trim( $Component , " /\\") ) ;
+		if ( $Component ) {
+			$Component = str_ireplace( "/" , DIRECTORY_SEPARATOR , trim( $Component , " /\\") ) ;
+			$Component = str_ireplace( "\\" , DIRECTORY_SEPARATOR , $Component ) ;
+			$Component = explode( DIRECTORY_SEPARATOR , $Component ) ;
+			$Link .= trim( implode( "/" , $Component ) , '/' );
+		}
 
-		$Component = str_ireplace( "\\" , DIRECTORY_SEPARATOR , $Component ) ;
+		$Link = explode( '/' . $relative . '/' , $Link );
+		$Link = $relative . '/' . array_pop( $Link );
 
-		$Component = explode( DIRECTORY_SEPARATOR , $Component ) ;
-
-		$Link = $this->App()->AppWww() . "/" . implode( "/" , $Component );
-
-		return trim( $Link , " /\\" );
+		return '/' . trim( $Link , " /\\" );
 
 	}
 
