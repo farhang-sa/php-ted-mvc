@@ -42,7 +42,7 @@ class httpRequestPlugin extends Ted\Plugin {
             $contextData['ssl'] = [ 'verify_peer' => false , 'verify_peer_name' => false ] ;
 
         // set custom context settings like token , content-type , etc
-        if( is_array( $customContext ) && ! empty() )
+        if( is_array( $customContext ) && ! empty( $customContext ) )
             $contextData = array_merge( $contextData , $customContext );
 
 		// Create context resource for our request
