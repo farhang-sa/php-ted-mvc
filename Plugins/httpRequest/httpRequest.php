@@ -10,7 +10,19 @@ class httpRequestPlugin extends Ted\Plugin {
     public function ignoreSSL( $ignore = true ){
         $this->ignoreSSL = $ignore ; }
 
-	public function Request( $url , $data = array() , $method = 'GET' , $customContext = array() ){
+    public function get( $url , $customContext = array() ){
+        return $this->Request( $url , null , 'GET' , $customContext ); }
+
+    public function post( $url , $data , $customContext = array() ){
+        return $this->Request( $url , $data , 'POST' , $customContext ); }
+
+    public function curlGet( $url , $customContext = array() ){
+        return $this->RequestCurl( $url , null , 'GET' , $customContext ); }
+
+    public function curlPost( $url , $data , $customContext = array() ){
+        return $this->RequestCurl( $url , $data , 'POST' , $customContext ); }
+
+    public function Request( $url , $data = array() , $method = 'GET' , $customContext = array() ){
 
         // jquery or direct-query
         if( is_string( $data ) ) {
@@ -20,13 +32,13 @@ class httpRequestPlugin extends Ted\Plugin {
         }
 
         // build query or accept direct-query
-		$query = is_array( $data ) ? http_build_query( $data ) : $data ;
+        $query = is_array( $data ) ? http_build_query( $data ) : $data ;
 
-		// set method
-		$method = $method ? strtoupper( $method ) : 'GET' ;
+        // set method
+        $method = $method ? strtoupper( $method ) : 'GET' ;
 
-		// Create Http context details
-		$contextData = array ( 'method' => $method );
+        // Create Http context details
+        $contextData = array ( 'method' => $method );
 
         // set headers and post data
         $cHeaders = array( 'Connection: close' );
@@ -45,23 +57,25 @@ class httpRequestPlugin extends Ted\Plugin {
         if( is_array( $customContext ) && ! empty( $customContext ) )
             $contextData = array_merge( $contextData , $customContext );
 
-		// Create context resource for our request
-		$context = stream_context_create(array( 'http' => $contextData ));
+        // Create context resource for our request
+        $context = stream_context_create(array( 'http' => $contextData ));
 
-		// Read page rendered as result of your POST request
-		$response = null ;
+        // Read page
+        $response = null ;
         try{
             $response = file_get_contents( $url , false , $context ) ;
         } catch( Exception $e ){
-            $response = array(
+            $response = json_encode( array(
                 'status' => -1 ,
                 'message' => $e->getMessage() ,
                 'error' => $e ,
                 'fail' => true ,
-            );
+            ));
         }
 
-	}
+        return $response ;
+
+    }
 
     public function RequestCurl( $url , $data = array() , $method = 'GET' , $customOptions = array() ) {
 
@@ -73,28 +87,28 @@ class httpRequestPlugin extends Ted\Plugin {
         }
 
         // build query or accept direct-query
-		$query = is_array( $data ) ? http_build_query( $data ) : $data ;
+        $query = is_array( $data ) ? http_build_query( $data ) : $data ;
 
-		// set method
-		$method = $method ? strtoupper( $method ) : 'GET' ;
+        // set method
+        $method = $method ? strtoupper( $method ) : 'GET' ;
 
         // create curl options
-		$cOpts = [ CURLOPT_RETURNTRANSFER => true ];
+        $cOpts = [ CURLOPT_RETURNTRANSFER => true ];
 
         // set [curl option] headers and post data
         $cHeaders = array( 'Connection: close' );
         if( $method === 'POST' && $query && ! empty( $query ) ) :
             $cHeaders[] = 'Content-Length: ' . strlen( $query ) ;
             $cHeaders[] = 'Content-Type: application/x-www-form-urlencoded' ;
-			$cOpts[CURLOPT_POST] = true ;
-			$cOpts[CURLOPT_POSTFIELDS] = $query ;
+            $cOpts[CURLOPT_POST] = true ;
+            $cOpts[CURLOPT_POSTFIELDS] = $query ;
         endif ;
         $cOpts[CURLOPT_HTTPHEADER] = $cHeaders ;
 
         // ignore ssl+tls
         if( $this->ignoreSSL ){
-		    $cOpts[CURLOPT_SSL_VERIFYPEER] = false ;
-		    $cOpts[CURLOPT_SSL_VERIFYHOST] = false ;
+            $cOpts[CURLOPT_SSL_VERIFYPEER] = false ;
+            $cOpts[CURLOPT_SSL_VERIFYHOST] = false ;
         }
 
         // set custom context settings like token , header content-type , etc
@@ -102,27 +116,27 @@ class httpRequestPlugin extends Ted\Plugin {
             $cOpts = array_merge( $cOpts , $customOptions );
 
         // init curl
-		$cuh = curl_init( $url );
+        $cuh = curl_init( $url );
 
         // set options
-		curl_setopt_array( $cuh , $cOpts );
+        curl_setopt_array( $cuh , $cOpts );
 
         // exec request
-		$response = null ;
-		try{
-			$response = curl_exec($cuh);
-			curl_close($cuh);
-		} catch( Exception $e ){
-		    $response = array(
-		        'status' => -1 ,
-		        'message' => $e->getMessage() ,
-		        'error' => $e ,
-		        'fail' => true ,
-		    );
-		}
+        $response = null ;
+        try{
+            $response = curl_exec($cuh);
+            curl_close($cuh);
+        } catch( Exception $e ){
+            $response = json_encode( array(
+                'status' => -1 ,
+                'message' => $e->getMessage() ,
+                'error' => $e ,
+                'fail' => true ,
+            ));
+        }
 
-		return $response;
+        return $response;
 
-	}
+    }
 
 }
