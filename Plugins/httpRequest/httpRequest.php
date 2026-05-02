@@ -55,7 +55,8 @@ class httpRequestPlugin extends Ted\Plugin {
 
         // set custom context settings like token , content-type , etc
         if( is_array( $customContext ) && ! empty( $customContext ) )
-            $contextData = array_merge( $contextData , $customContext );
+            foreach ($customContext as $k => $v)
+                $contextData[$k] = $v ;
 
         // Create context resource for our request
         $context = stream_context_create(array( 'http' => $contextData ));
@@ -113,7 +114,8 @@ class httpRequestPlugin extends Ted\Plugin {
 
         // set custom context settings like token , header content-type , etc
         if( is_array( $customOptions ) && ! empty( $customOptions ) )
-            $cOpts = array_merge( $cOpts , $customOptions );
+            foreach ($customOptions as $k => $v)
+                $cOpts[$k] = $v ;
 
         // init curl
         $cuh = curl_init( $url );
