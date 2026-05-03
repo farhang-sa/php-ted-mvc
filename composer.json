@@ -28,6 +28,6 @@
 	} ,
     
     "autoload": {
-        "files": [ "Ted.php" ]
+        "files": [ "src/Ted.php" ]
     }
 }

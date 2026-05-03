@@ -19,6 +19,14 @@ function ExecFunctions(){
 // Copy All Files from $src folder to $dst folder
 function Copy( $src , $dst ) { 
     return MaxTools\Copy( $src , $dst ); }
+
+// Delete All Files from $src
+function Delete( $src ) { 
+    return MaxTools\Delete( $src , $dst ); }
+
+// Cut All Files from $src folder to $dst folder
+function Move( $src , $dst ) { 
+    return MaxTools\Move( $src , $dst ); }
     
 // Include_once file if found in $root ( Default $root is TPath_Root )
 function Import( $import = null , $root = null , $ext = 'php' ) {
@@ -59,6 +67,14 @@ function json_str_to_array( $str ){
 // get array to json string
 function json_array_to_str( $array , $pretty = false ){
     return MaxTools\json_array_to_str( $array , $pretty ); }
+
+// find best matches key
+function findBestMatchKey( $needle , $stack ){
+	return MaxTools\findBestMatchKey($needle , $stack ); }
+
+// find best matches value
+function findBestMatchValue( $needle , $stack ){
+	return MaxTools\findBestMatchValue($needle , $stack ); }
 
 // check if this array is indexed by numbers
 function isIndexedArray( $array ){
@@ -116,7 +132,6 @@ function WebPath(){
 // Get Web-Link ( Direct-Link ) of a file
 function FindWebPath( $address = null ){
 	return MaxTools\FindWebPath( $address , TPath_Root ); }
-
 
 function ListMultipartUploads( $MPUF ){
 	return MaxTools\ListMultipartUploads( $MPUF ); }
