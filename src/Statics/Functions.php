@@ -22,7 +22,7 @@ function Copy( $src , $dst ) {
 
 // Delete All Files from $src
 function Delete( $src ) { 
-    return MaxTools\Delete( $src , $dst ); }
+    return MaxTools\Delete( $src ); }
 
 // Cut All Files from $src folder to $dst folder
 function Move( $src , $dst ) { 

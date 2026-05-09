@@ -74,7 +74,7 @@ abstract class Application extends AppBase {
 		
 		if ( isset( self::$Instances[ $this->AppName() ] ) ) return true ;
 		
-		$this->AppRoot = ( ! is_dir( $root) ) ? TPath_Root : $root ;
+		$this->AppRoot = empty( $root ) || !is_dir( $root ) ? TPath_Root : $root ;
 		
 		$defaultRoute = array();
 		

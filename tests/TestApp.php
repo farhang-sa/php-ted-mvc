@@ -48,7 +48,7 @@ class TestApp extends Ted\Application {
 	public function ExecHtml(){
 		if( $this->input->info ) {
 
-			print '<a href="/" class="btn btn-info btn-lg p-3 m-3">Go back</a>' ;
+			print '<a href="?" class="btn btn-info btn-lg p-3 m-3">Go back</a>' ;
 		
 			Ted\Ted::info();
 		
@@ -56,7 +56,7 @@ class TestApp extends Ted\Application {
 		
 		} // else 
 
-		print '<div><h3><a href="/index.php?info=1">See info</a></h3></div>' ;
+		print '<div><h3><a href="?info=1">See info</a></h3></div>' ;
 		print Ted\br(3);
 
 		// any code!
@@ -80,10 +80,10 @@ class TestApp extends Ted\Application {
 
 		$Html->Title( 'TestApp | By Farhang Saeedi' );
 
-		$Html->ExternalCss( 
-			'https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css' );
-		$Html->ExternalJs( 
-			'https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js' , false );
+		//$Html->ExternalCss( 
+		//	'https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css' );
+		//$Html->ExternalJs( 
+		//	'https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js' , false );
 
 		// html head
 		print "<html>\n<head>" ;
