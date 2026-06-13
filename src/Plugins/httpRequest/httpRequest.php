@@ -42,9 +42,10 @@ class httpRequestPlugin extends Ted\Plugin {
 
         // set headers and post data
         $cHeaders = array( 'Connection: close' );
-        if( $method === 'POST' && $query && ! empty( $query ) ) :
+        if( $query && ! empty( $query ) ) :
             $cHeaders[] = 'Content-Length: ' . strlen( $query ) ;
-            $cHeaders[] = 'Content-Type: application/x-www-form-urlencoded' ;
+            if( $method === 'POST' )
+                $cHeaders[] = 'Content-Type: application/x-www-form-urlencoded' ;
             $contextData['content'] = $query ;
         endif ;
         $contextData['header'] = implode( "\r\n" , $cHeaders ) ;
@@ -98,11 +99,17 @@ class httpRequestPlugin extends Ted\Plugin {
 
         // set [curl option] headers and post data
         $cHeaders = array( 'Connection: close' );
-        if( $method === 'POST' && $query && ! empty( $query ) ) :
+        if( $query && ! empty( $query ) ) :
             $cHeaders[] = 'Content-Length: ' . strlen( $query ) ;
-            $cHeaders[] = 'Content-Type: application/x-www-form-urlencoded' ;
-            $cOpts[CURLOPT_POST] = true ;
-            $cOpts[CURLOPT_POSTFIELDS] = $query ;
+            if( $method === 'POST' ) :
+                $cHeaders[] = 'Content-Type: application/x-www-form-urlencoded' ;
+                $cOpts[CURLOPT_POST] = true ;
+                $cOpts[CURLOPT_POSTFIELDS] = $query ;
+            else :
+                // set data in url
+                $url .= '?' . $query ;
+                $cOpts[CURLOPT_CUSTOMREQUEST] = $method ;
+            endif ;
         endif ;
         $cOpts[CURLOPT_HTTPHEADER] = $cHeaders ;
 
@@ -115,7 +122,21 @@ class httpRequestPlugin extends Ted\Plugin {
         // set custom context settings like token , header content-type , etc
         if( is_array( $customOptions ) && ! empty( $customOptions ) )
             foreach ($customOptions as $k => $v)
-                $cOpts[$k] = $v ;
+                if( ! is_array( $v ) ) :
+                    $cOpts[$k] = $v ;
+                elseif( ! isset( $cOpts[$k] ) ) :
+                    $cOpts[$k] = $v ;
+                elseif( is_array( $cOpts[$k] ) ) :
+                    foreach( $v as $opt => $val ) :
+                        if( $val === null && isset( $cOpts[$k][$opt] ) ) :
+                            unset( $cOpts[$k][$opt] );
+                        else :
+                            $cOpts[$k][$opt] = $val ;
+                        endif ;
+                    endforeach ;
+                else :
+                    $cOpts[$k] = $v ;
+                endif ;
 
         // init curl
         $cuh = curl_init( $url );
